@@ -92,6 +92,7 @@
 
 </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -133,11 +134,7 @@
   <div class="section-body">
     <div class="meta-grid">
       <div class="form-group"><label>Nama Lengkap</label><input type="text" placeholder="Nama penanggung jawab"></div>
-      <div class="form-group"><label>NIK</label><input type="text" placeholder="Nomor Induk Kependudukan"></div>
       <div class="form-group"><label>Jabatan</label><select><option value="">-- Pilih --</option><option>Direktur / Pemilik</option><option>Manager Processing</option><option>Ketua Koperasi</option><option>Supervisor Mill</option><option>Quality Control Manager</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Tempat, Tanggal Lahir</label><input type="text" placeholder="Banda Aceh, 15 Agustus 1985"></div>
-      <div class="form-group"><label>Pendidikan Terakhir</label><select><option value="">-- Pilih --</option><option>SMA / SMK</option><option>D1/D2</option><option>S1</option><option>S2</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Bidang Studi / Keahlian</label><input type="text" placeholder="Teknik Pertanian / Food Technology"></div>
       <div class="form-group"><label>Pengalaman di Industri Kopi (tahun)</label><input type="number" placeholder="10"></div>
       <div class="form-group"><label>Sertifikasi Keahlian</label><input type="text" placeholder="Q Grader, Roaster, Processing, dll"></div>
       <div class="form-group"><label>No. Telepon</label><input type="text" placeholder="0812-3456-7890"></div>
@@ -182,12 +179,8 @@
         <h4>🔧 Mesin Pulper (Depulper)</h4>
         <div class="form-group"><label>Memiliki Pulper?</label><select onchange="toggleConditional('pulper-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (manual / outsource)</option></select></div>
         <div id="pulper-detail" class="conditional">
-          <div class="form-group"><label>Jenis Pulper</label><select><option value="">-- Pilih --</option><option>Disk Pulper (horizontal)</option><option>Drum Pulper</option><option>Lori Pulper</option><option>Hand crank (manual)</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Penagos MC-5"></div>
-          <div class="form-group"><label>Kapasitas (kg cherry/jam)</label><input type="text" placeholder="500 kg/jam"></div>
-          <div class="form-group"><label>Jumlah Unit</label><input type="number" placeholder="2"></div>
-          <div class="form-group"><label>Tahun Pembelian</label><input type="number" placeholder="2020"></div>
-          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu perbaikan</option><option>Rusak</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Jumlah Unit</label><input type="number" id="pulper-jumlah" placeholder="2" onchange="generatePulperRows()"></div>
+          <div id="pulper-rows"></div>
         </div>
       </div>
       <!-- DEMUCILAGER -->
@@ -196,7 +189,6 @@
         <div class="form-group"><label>Memiliki Demucilager?</label><select onchange="toggleConditional('demucilager-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (fermentasi air manual)</option></select></div>
         <div id="demucilager-detail" class="conditional">
           <div class="form-group"><label>Jenis</label><select><option value="">-- Pilih --</option><option>Mechanical demucilager</option><option>Penagos eco-pulper</option><option>Penagos MC-5 (integrated)</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Penagos DML-5"></div>
           <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="300 kg/jam"></div>
           <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Rusak</option><option>Lainnya</option></select></div>
         </div>
@@ -207,10 +199,7 @@
         <div class="form-group"><label>Memiliki Huller?</label><select onchange="toggleConditional('huller-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (outsource / manual)</option></select></div>
         <div id="huller-detail" class="conditional">
           <div class="form-group"><label>Jenis Huller</label><select><option value="">-- Pilih --</option><option>Friction huller (basah/kering)</option><option>Impact huller</option><option>Disk huller</option><option>Combined huller-polisher</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Satake"></div>
           <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="200 kg/jam"></div>
-          <div class="form-group"><label>Daya (HP / kW)</label><input type="text" placeholder="5 HP"></div>
-          <div class="form-group"><label>Jumlah Unit</label><input type="number" placeholder="1"></div>
           <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu service</option><option>Lainnya</option></select></div>
         </div>
       </div>
@@ -231,9 +220,7 @@
         <div class="form-group"><label>Memiliki Size Grader?</label><select onchange="toggleConditional('size-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (manual / outsource)</option></select></div>
         <div id="size-detail" class="conditional">
           <div class="form-group"><label>Jenis</label><select><option value="">-- Pilih --</option><option>Oscillating wire mesh</option><option>Slotted screen</option><option>Rotary drum grader</option><option>Hand screen (manual)</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Buhler"></div>
           <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="150 kg/jam"></div>
-          <div class="form-group"><label>Screen Size Tersedia</label><input type="text" placeholder="12, 13, 14, 15, 16, 17, 18"></div>
           <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Mesh perlu ganti</option><option>Lainnya</option></select></div>
         </div>
       </div>
@@ -242,10 +229,8 @@
         <h4>🎨 Color Sorter (Optical Sorting)</h4>
         <div class="form-group"><label>Memiliki Color Sorter?</label><select onchange="toggleConditional('color-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (hand pick / outsource)</option></select></div>
         <div id="color-detail" class="conditional">
-          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Satake SNJ, Buhler Sortex"></div>
           <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="500 kg/jam"></div>
           <div class="form-group"><label>Teknologi Sensor</label><select><option>RGB camera</option><option>RGB + Infrared</option><option>Full spectrum</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Tahun Pembelian</label><input type="number" placeholder="2022"></div>
           <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu kalibrasi</option><option>Lainnya</option></select></div>
         </div>
       </div>
@@ -341,21 +326,22 @@
       <h4>⚙️ B. Proses Pengolahan (Processing Protocol)</h4>
       <div class="form-group"><label>Metode Processing yang Diterapkan (bisa lebih dari satu)</label>
         <div class="radio-group">
-          <label><input type="checkbox" name="proc" value="wh"> Wet Hulled</label>
-          <label><input type="checkbox" name="proc" value="fw"> Full Washed</label>
-          <label><input type="checkbox" name="proc" value="hn"> Honey</label>
-          <label><input type="checkbox" name="proc" value="nt"> Natural</label>
-          <label><input type="checkbox" name="proc" value="wn"> Wine / Extended Ferment</label>
-          <label><input type="checkbox" name="proc" value="ex"> Experimental (Anaerobic, CM, dll)</label>
-          <label><input type="checkbox" name="proc" value="ln"> Lainnya</label>
+          <label><input type="checkbox" name="proc" value="wh" onchange="toggleProtocol('wh')"> Wet Hulled</label>
+          <label><input type="checkbox" name="proc" value="fw" onchange="toggleProtocol('fw')"> Full Washed</label>
+          <label><input type="checkbox" name="proc" value="hn" onchange="toggleProtocol('hn')"> Honey</label>
+          <label><input type="checkbox" name="proc" value="nt" onchange="toggleProtocol('nt')"> Natural</label>
+          <label><input type="checkbox" name="proc" value="wn" onchange="toggleProtocol('wn')"> Wine / Extended Ferment</label>
+          <label><input type="checkbox" name="proc" value="ex" onchange="toggleProtocol('ex')"> Experimental (Anaerobic, CM, dll)</label>
+          <label><input type="checkbox" name="proc" value="ln" onchange="toggleProtocol('ln')"> Lainnya</label>
         </div>
       </div>
-      <div class="form-group"><label>Protokol Wet Hulled<small>Jika menerapkan</small></label><textarea placeholder="Durasi fermentasi, kali bilas, durasi ke hulling, target MC sebelum hull..."></textarea></div>
-      <div class="form-group"><label>Protokol Full Washed<small>Jika menerapkan</small></label><textarea placeholder="Float tank, durasi fermentasi, bilasan, grading channel..."></textarea></div>
-      <div class="form-group"><label>Protokol Honey<small>Jika menerapkan</small></label><textarea placeholder="% mucilage, setting demucilager, turning frequency..."></textarea></div>
-      <div class="form-group"><label>Protokol Natural<small>Jika menerapkan</small></label><textarea placeholder="Sorting pre-dry, layer thickness, turning, drying duration..."></textarea></div>
-      <div class="form-group"><label>Protokol Wine / Extended Ferment<small>Jika menerapkan</small></label><textarea placeholder="Durasi fermentasi, monitoring brix/pH, emergency stop..."></textarea></div>
-      <div class="form-group"><label>Protokol Experimental<small>Jika menerapkan</small></label><textarea placeholder="Tank condition, inokulasi, CO2/O2 monitoring, temperature control..."></textarea></div>
+      <div id="proto-wh" class="conditional"><div class="form-group"><label>Protokol Wet Hulled</label><textarea placeholder="Durasi fermentasi, kali bilas, durasi ke hulling, target MC sebelum hull..."></textarea></div></div>
+      <div id="proto-fw" class="conditional"><div class="form-group"><label>Protokol Full Washed</label><textarea placeholder="Float tank, durasi fermentasi, bilasan, grading channel..."></textarea></div></div>
+      <div id="proto-hn" class="conditional"><div class="form-group"><label>Protokol Honey</label><textarea placeholder="% mucilage, setting demucilager, turning frequency..."></textarea></div></div>
+      <div id="proto-nt" class="conditional"><div class="form-group"><label>Protokol Natural</label><textarea placeholder="Sorting pre-dry, layer thickness, turning, drying duration..."></textarea></div></div>
+      <div id="proto-wn" class="conditional"><div class="form-group"><label>Protokol Wine / Extended Ferment</label><textarea placeholder="Durasi fermentasi, monitoring brix/pH, emergency stop..."></textarea></div></div>
+      <div id="proto-ex" class="conditional"><div class="form-group"><label>Protokol Experimental</label><textarea placeholder="Tank condition, inokulasi, CO2/O2 monitoring, temperature control..."></textarea></div></div>
+      <div id="proto-ln" class="conditional"><div class="form-group"><label>Protokol Lainnya</label><textarea placeholder="Deskripsikan protokol khusus..."></textarea></div></div>
     </div>
 
     <div class="sop-flow">
@@ -370,7 +356,7 @@
       <h4>🏭 D. SOP Dry Mill & Sorting</h4>
       <div class="sop-item"><div class="num">10</div><div class="label">MC Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>Harus 10-12%</option><option>Harus 11-12%</option><option>Tidak dicek</option><option>Lainnya</option></select><input type="text" placeholder="Alat cek"></div>
       <div class="sop-item"><div class="num">11</div><div class="label">Urutan Sorting</div><select><option value="">-- Pilih --</option><option>Suton → Size → Color → Hand Pick</option><option>Size → Suton → Color → Hand Pick</option><option>Color → Size → Hand Pick</option><option>Lainnya</option></select><input type="text" placeholder="Kustom"></div>
-      <div class="sop-item"><div class="num">12</div><div class="label">Standar Defect Akhir</div><select><option value="">-- Pilih --</option><option>Specialty (0 defect)</option><option>Premium (SCA Grade 1)</option><option>Grade 1 (commercial)</option><option>Grade 2</option><option>Lainnya</option></select><input type="text" placeholder="Defect count per 350g"></div>
+      <div class="sop-item"><div class="num">12</div><div class="label">Standar Defect Akhir (bisa lebih dari satu)</div><div class="radio-group"><label><input type="checkbox" name="defect" value="specialty"> Specialty (0 defect)</label><label><input type="checkbox" name="defect" value="premium"> Premium (SCA Grade 1)</label><label><input type="checkbox" name="defect" value="grade1"> Grade 1 (commercial)</label><label><input type="checkbox" name="defect" value="grade2"> Grade 2</label><label><input type="checkbox" name="defect" value="lainnya"> Lainnya</label></div><input type="text" placeholder="Defect count per 350g / keterangan"></div>
       <div class="sop-item"><div class="num">13</div><div class="label">Cross-Contamination Protocol</div><select><option value="">-- Pilih --</option><option>Vacuum + brush antar lot</option><option>Cuci + brush</option><option>Brush saja</option><option>Tidak ada</option><option>Lainnya</option></select><input type="text" placeholder="Frekuensi bersih"></div>
     </div>
 
@@ -385,7 +371,7 @@
 
 <!-- SECTION 7: SDM PROCESSOR -->
 <div class="section">
-  <div class="section-header" onclick="toggleSection(this)"><h2>👷 7. Tenaga Kerja Processor (per Fungsi)</h2><span class="badge">Wajib</span></div>
+  <div class="section-header" onclick="toggleSection(this)"><h2>👷 7. Tenaga Kerja Processor</h2><span class="badge">Wajib</span></div>
   <div class="section-body">
     <div class="meta-grid">
       <div class="form-group"><label>Total Pekerja Tetap</label><input type="number" placeholder="5"></div>
@@ -393,13 +379,6 @@
       <div class="form-group"><label>Total Buruh Harian (low season)</label><input type="number" placeholder="8"></div>
       <div class="form-group"><label>Outsource / Third Party?</label><select><option value="">-- Pilih --</option><option>Ya (sorting house, transport)</option><option>Tidak</option><option>Kadang</option><option>Lainnya</option></select></div>
     </div>
-    <div class="subsection-title">Rekap Tenaga Kerja per Fungsi & Sistem Pembayaran</div>
-    <p style="font-size:.85rem; color:#666; margin-bottom:12px;">Isi jumlah orang per fungsi, klasifikasi SDM, sistem pembayaran, dan upah. Tambah baris jika ada fungsi lain.</p>
-    <table class="table-dynamic" id="sdm-processor">
-      <thead><tr><th>No</th><th>Fungsi / Tugas</th><th>Jumlah Orang</th><th>Klasifikasi SDM</th><th>Sistem Pembayaran</th><th>Catatan</th><th>Aksi</th></tr></thead>
-      <tbody></tbody>
-    </table>
-    <button class="btn btn-add" onclick="addRow('sdm-processor')">+ Tambah Fungsi</button>
   </div>
 </div>
 
@@ -421,7 +400,7 @@
 </div>
 
 <div style="text-align:center; margin:30px 0;">
-  <button class="btn btn-save" onclick="testGasConnection()" style="background:#6c757d; margin-right:10px;">🔌 Test Koneksi GAS</button><button id="btn-save-processor" class="btn btn-save" onclick="submitToSheets('processor')">💾 Simpan Form Processor ke Google Sheets</button>
+  <button id="btn-save-processor" class="btn btn-save" onclick="submitToSheets('processor')">💾 Simpan Form Processor ke Google Sheets</button>
 </div>
 
 <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
@@ -731,6 +710,11 @@ function toggleConditional(id, val) {
   var el = document.getElementById(id);
   if(el) el.classList.toggle('show', val === 'ya');
 }
+function toggleProtocol(val) {
+  var cb = document.querySelector('input[name="proc"][value="' + val + '"]');
+  var el = document.getElementById('proto-' + val);
+  if(el) el.classList.toggle('show', cb && cb.checked);
+}
 
 function toggleDrySections() {
   var val = document.getElementById('dry-type').value;
@@ -745,6 +729,23 @@ function toggleDrySections() {
 }
 
 /* ===== PROCESSOR SDM ===== */
+function generatePulperRows() {
+  var jumlah = parseInt(document.getElementById('pulper-jumlah').value) || 0;
+  var container = document.getElementById('pulper-rows');
+  container.innerHTML = '';
+  for(var i=1; i<=jumlah; i++) {
+    var div = document.createElement('div');
+    div.style.cssText = 'background:#f8f9fa; border:1px solid #e0e0e0; border-radius:8px; padding:12px; margin-bottom:10px;';
+    div.innerHTML = '<h5 style="color:var(--primary); margin-bottom:8px;">Pulper Unit #' + i + '</h5>' +
+      '<div class="meta-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px;">' +
+      '<div class="form-group"><label>Jenis Pulper</label><select><option value="">-- Pilih --</option><option>Disk Pulper (horizontal)</option><option>Drum Pulper</option><option>Lori Pulper</option><option>Hand crank (manual)</option><option>Lainnya</option></select></div>' +
+      '<div class="form-group"><label>Kapasitas (kg cherry/jam)</label><input type="text" placeholder="500 kg/jam"></div>' +
+      '<div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu perbaikan</option><option>Rusak</option><option>Lainnya</option></select></div>' +
+      '</div>';
+    container.appendChild(div);
+  }
+}
+
 function addRow(tableId) {
   var tbody = document.querySelector('#'+tableId+' tbody');
   var n = tbody.rows.length + 1;
@@ -810,9 +811,6 @@ function addRowTable(btn) {
 }
 
 /* ===== INIT ===== */
-addRow('sdm-processor');
-addRow('sdm-processor');
-addRow('sdm-processor');
 </script>
 <script>
 // ===== CUSTOM MODAL FUNCTIONS =====
@@ -1030,7 +1028,7 @@ function collectProcessorData() {
     totalPekerjaTetap: getVal(p, 'input[type="number"][placeholder="5"]'),
     totalBuruhPeak: getVal(p, 'input[type="number"][placeholder="25"]'),
     totalBuruhLow: getVal(p, 'input[type="number"][placeholder="8"]'),
-    sdmDetails: JSON.stringify(collectSDM(p)),
+
     npwp: getVal(p, 'input', 20),
     sertifikasiProses: getSelMultiple(p, 'select[multiple]')
   };
@@ -1120,22 +1118,7 @@ function collectSOP(context, sectionTitle) {
   });
   return JSON.stringify(result);
 }
-function collectSDM(context) {
-  var data = [];
-  context.querySelectorAll('#sdm-processor tbody tr').forEach(function(row) {
-    var cells = row.querySelectorAll('td');
-    if (cells.length > 1) {
-      data.push({
-        fungsi: cells[1].querySelector('select') ? cells[1].querySelector('select').value : '',
-        jumlah: cells[2].querySelector('input') ? cells[2].querySelector('input').value : '',
-        klasifikasi: cells[3].querySelector('select') ? cells[3].querySelector('select').value : '',
-        sistemBayar: cells[4].querySelector('select') ? cells[4].querySelector('select').value : '',
-        catatan: cells[5].querySelector('input') ? cells[5].querySelector('input').value : ''
-      });
-    }
-  });
-  return data;
-}
+
 function collectTableData(context, tableClass) {
   var table = context.querySelector('.' + tableClass);
   if (!table) return [];

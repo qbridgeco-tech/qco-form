@@ -93,6 +93,7 @@
 </style>
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -118,7 +119,7 @@
     <div class="meta-grid">
       <div class="form-group"><label>Nama Processor / Wet Mill</label><input type="text" placeholder="Contoh: Koperasi Maju Jaya Wet Mill"></div>
       <div class="form-group"><label>Nama Resmi Badan Usaha</label><input type="text" placeholder="CV / PT / Koperasi / Perorangan"></div>
-      <div class="form-group"><label>No. Izin / NIB / AHU</label><input type="text" placeholder="NIB atau nomor registrasi"></div>
+      
       <div class="form-group"><label>Tahun Berdiri</label><input type="number" placeholder="2015"></div>
       <div class="form-group"><label>Alamat Lengkap</label><textarea placeholder="Jl. Kopi No. 1, Desa Sumber, Kecamatan Gayo Lues"></textarea></div>
       <div class="form-group"><label>Koordinat GPS (Lat, Long)</label><input type="text" placeholder="-3.5954, 97.1411"></div>
@@ -136,11 +137,11 @@
       <div class="form-group"><label>Nama Lengkap</label><input type="text" placeholder="Nama penanggung jawab"></div>
       <div class="form-group"><label>Jabatan</label><select><option value="">-- Pilih --</option><option>Direktur / Pemilik</option><option>Manager Processing</option><option>Ketua Koperasi</option><option>Supervisor Mill</option><option>Quality Control Manager</option><option>Lainnya</option></select></div>
       <div class="form-group"><label>Pengalaman di Industri Kopi (tahun)</label><input type="number" placeholder="10"></div>
-      <div class="form-group"><label>Sertifikasi Keahlian</label><input type="text" placeholder="Q Grader, Roaster, Processing, dll"></div>
+      
       <div class="form-group"><label>No. Telepon</label><input type="text" placeholder="0812-3456-7890"></div>
       <div class="form-group"><label>Email</label><input type="email" placeholder="nama@email.com"></div>
       <div class="form-group"><label>Alamat Domisili</label><textarea placeholder="Alamat lengkap penanggung jawab"></textarea></div>
-      <div class="form-group"><label>Foto KTP / Tanda Tangan Digital</label><input type="file" accept="image/*" data-source="processor" data-field="fotoKtp"></div>
+      
     </div>
   </div>
 </div>
@@ -155,7 +156,7 @@
       <div class="form-group"><label>Material Lantai Gudang</label><select><option value="">-- Pilih --</option><option>Cor beton</option><option>Ubin keramik</option><option>Lantai tanah</option><option>Kayu / pallet</option><option>Lainnya</option></select></div>
       <div class="form-group"><label>Ventilasi Gudang</label><select><option value="">-- Pilih --</option><option>Alami (jendela/lubang)</option><option>Mechanical (exhaust fan)</option><option>Kombinasi</option><option>Terbatas</option><option>Lainnya</option></select></div>
       <div class="form-group"><label>Sistem Pengelolaan Suhu Gudang</label><select><option value="">-- Pilih --</option><option>Climate control (AC/cooler)</option><option>Insulasi dinding</option><option>Ventilasi alami</option><option>Tidak ada</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Kondisi Gudang</label><select><option value="">-- Pilih --</option><option>Baru / sangat baik</option><option>Baik</option><option>Cukup (perlu perbaikan)</option><option>Kurang</option><option>Lainnya</option></select></div>
+      
     </div>
     <div class="subsection-title">📐 Spesifikasi Rambang (Cherry Receiving Area)</div>
     <div class="meta-grid">
@@ -163,8 +164,8 @@
       <div class="form-group"><label>Material Rambang</label><select><option value="">-- Pilih --</option><option>Beton cor</option><option>Cor + keramik</option><option>Stainless steel</option><option>Plastik food-grade</option><option>Lainnya</option></select></div>
       <div class="form-group"><label>Kapasitas Rambang (kg cherry)</label><input type="text" placeholder="2000 kg"></div>
       <div class="form-group"><label>Drainase / Sistem Buang Air</label><select><option value="">-- Pilih --</option><option>Drainase + sedimentasi</option><option>Langsung ke selokan</option><option>Tidak ada</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Cover / Atap Rambang</label><select><option value="">-- Pilih --</option><option>Atap seng permanen</option><option>Paranet / shade net</option><option>Tenda darurat</option><option>Tidak ada (terbuka)</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Alat Timbang Cherry</label><select><option value="">-- Pilih --</option><option>Timbangan digital tersertifikasi</option><option>Timbangan digital biasa</option><option>Timbangan gantung</option><option>Timbangan manual</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Cover / Atap Rambang</label><select><option value="">-- Pilih --</option><option>Atap permanen</option><option>Paranet / shade net</option><option>Tenda darurat</option><option>Tidak ada (terbuka)</option><option>Lainnya</option></select></div>
+      
     </div>
   </div>
 </div>
@@ -179,8 +180,7 @@
         <h4>🔧 Mesin Pulper (Depulper)</h4>
         <div class="form-group"><label>Memiliki Pulper?</label><select onchange="toggleConditional('pulper-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (manual / outsource)</option></select></div>
         <div id="pulper-detail" class="conditional">
-          <div class="form-group"><label>Jumlah Unit</label><input type="number" id="pulper-jumlah" placeholder="2" onchange="generatePulperRows()"></div>
-          <div id="pulper-rows"></div>
+          <p style="color:#666; font-size:.85rem; margin-top:8px;">Detail peralatan dicatat saat verifikasi lapangan.</p>
         </div>
       </div>
       <!-- DEMUCILAGER -->
@@ -188,9 +188,7 @@
         <h4>🫧 Demucilager / Mucilage Remover</h4>
         <div class="form-group"><label>Memiliki Demucilager?</label><select onchange="toggleConditional('demucilager-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (fermentasi air manual)</option></select></div>
         <div id="demucilager-detail" class="conditional">
-          <div class="form-group"><label>Jenis</label><select><option value="">-- Pilih --</option><option>Mechanical demucilager</option><option>Penagos eco-pulper</option><option>Penagos MC-5 (integrated)</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="300 kg/jam"></div>
-          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Rusak</option><option>Lainnya</option></select></div>
+          <p style="color:#666; font-size:.85rem; margin-top:8px;">Detail peralatan dicatat saat verifikasi lapangan.</p>
         </div>
       </div>
       <!-- HULLER -->
@@ -198,9 +196,7 @@
         <h4>🏭 Mesin Huller (Penggiling Kering)</h4>
         <div class="form-group"><label>Memiliki Huller?</label><select onchange="toggleConditional('huller-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (outsource / manual)</option></select></div>
         <div id="huller-detail" class="conditional">
-          <div class="form-group"><label>Jenis Huller</label><select><option value="">-- Pilih --</option><option>Friction huller (basah/kering)</option><option>Impact huller</option><option>Disk huller</option><option>Combined huller-polisher</option><option>Lainnya</option></select></div>
-          <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="200 kg/jam"></div>
-          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu service</option><option>Lainnya</option></select></div>
+          <p style="color:#666; font-size:.85rem; margin-top:8px;">Detail peralatan dicatat saat verifikasi lapangan.</p>
         </div>
       </div>
       <!-- SUTON -->
@@ -287,7 +283,7 @@
     <div id="dry-greenhouse" class="conditional">
       <div class="subsection-title">🌿 Greenhouse Detail</div>
       <div class="meta-grid">
-        <div class="form-group"><label>Struktur</label><select><option value="">-- Pilih --</option><option>Baja ringan + plastik UV</option><option>Aluminium + polycarbonate</option><option>Bambu + plastik</option><option>Lainnya</option></select></div>
+        
         <div class="form-group"><label>Climate Control?</label><select id="has-cc" onchange="toggleConditional('cc-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak</option></select></div>
         <div id="cc-detail" class="conditional">
           <div class="form-group"><label>Sistem Climate Control</label><select><option value="">-- Pilih --</option><option>Exhaust fan + vent</option><option>Misting system</option><option>Heater (mechanical dryer)</option><option>Full HVAC</option><option>Lainnya</option></select></div>
@@ -315,11 +311,11 @@
   <div class="section-body">
     <div class="sop-flow">
       <h4>📥 A. Penerimaan Cherry (Receiving)</h4>
-      <div class="sop-item"><div class="num">1</div><div class="label">Sumber Pembelian Cherry</div><select><option value="">-- Pilih --</option><option>Petani perorangan</option><option>Kelompok tani</option><option>Koperasi</option><option>Collector / broker</option><option>Campuran</option><option>Lainnya</option></select><input type="text" placeholder="Contoh: 80% petani langsung"></div>
-      <div class="sop-item"><div class="num">2</div><div class="label">Metode Timbang Cherry</div><select><option value="">-- Pilih --</option><option>Timbang di rambang</option><option>Timbang di kebun (petik)</option><option>Timbang saat delivery</option><option>Tidak ditimbang (perkiraan)</option><option>Lainnya</option></select><input type="text" placeholder="Alat timbang"></div>
-      <div class="sop-item"><div class="num">3</div><div class="label">Pembayaran Cherry</div><select><option value="">-- Pilih --</option><option>Tunai saat serah</option><option>Transfer harian</option><option>Transfer mingguan</option><option>Transfer bulanan</option><option>Bagi hasil</option><option>Lainnya</option></select><input type="text" placeholder="Harga per kg"></div>
-      <div class="sop-item"><div class="num">4</div><div class="label">Maksimal Waktu Cherry Sampai Rambang</div><select><option value="">-- Pilih --</option><option>< 4 jam</option><option>4-8 jam</option><option>8-12 jam</option><option>12-24 jam</option><option>> 24 jam (tidak diterima)</option><option>Lainnya</option></select><input type="text" placeholder="Sanksi jika terlambat"></div>
-      <div class="sop-item"><div class="num">5</div><div class="label">Seleksi Cherry di Rambang</div><select><option value="">-- Pilih --</option><option>Semua diterima</option><option>Sortir manual (reject underripe)</option><option>Float tank</option><option>Brix test + visual</option><option>Lainnya</option></select><input type="text" placeholder="Standar minimal °Brix"></div>
+      <div class="sop-item"><div class="num">1</div><div class="label">Sumber Pembelian Cherry</div><select><option value="">-- Pilih --</option><option>Petani perorangan</option><option>Kelompok tani</option><option>Koperasi</option><option>Collector / broker</option><option>Campuran</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">2</div><div class="label">Metode Timbang Cherry</div><select><option value="">-- Pilih --</option><option>Timbang di rambang</option><option>Timbang di kebun (petik)</option><option>Timbang saat delivery</option><option>Tidak ditimbang (perkiraan)</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">3</div><div class="label">Pembayaran Cherry</div><select><option value="">-- Pilih --</option><option>Tunai saat serah</option><option>Transfer harian</option><option>Transfer mingguan</option><option>Transfer bulanan</option><option>Bagi hasil</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">4</div><div class="label">Maksimal Waktu Cherry Sampai Rambang</div><select><option value="">-- Pilih --</option><option>< 4 jam</option><option>4-8 jam</option><option>8-12 jam</option><option>12-24 jam</option><option>> 24 jam (tidak diterima)</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">5</div><div class="label">Seleksi Cherry di Rambang</div><select><option value="">-- Pilih --</option><option>Semua diterima</option><option>Sortir manual (reject underripe)</option><option>Float tank</option><option>Brix test + visual</option><option>Lainnya</option></select></div>
     </div>
 
     <div class="sop-flow">
@@ -346,25 +342,25 @@
 
     <div class="sop-flow">
       <h4>☀️ C. SOP Jemur (Drying SOP)</h4>
-      <div class="sop-item"><div class="num">6</div><div class="label">Target Moisture Content (MC) Akhir</div><input type="text" placeholder="10.5-11.5%"><select><option value="">-- Pilih --</option><option>Diukur tiap hari</option><option>Diukur 2x seminggu</option><option>Diukur saat keluar bed</option><option>Tidak diukur</option><option>Lainnya</option></select></div>
-      <div class="sop-item"><div class="num">7</div><div class="label">Frekuensi Turning / Pembalikan</div><select><option value="">-- Pilih --</option><option>Tiap 1 jam (hari 1-3)</option><option>Tiap 2 jam</option><option>Tiap 3 jam</option><option>Tiap 4 jam</option><option>2x sehari</option><option>Lainnya</option></select><input type="text" placeholder="Jam pembalikan"></div>
-      <div class="sop-item"><div class="num">8</div><div class="label">Proteksi Hujan</div><select><option value="">-- Pilih --</option><option>Cover plastic manual</option><option>Turunkan ke bawah</option><option>Greenhouse otomatis</option><option>Tidak ada proteksi</option><option>Lainnya</option></select><input type="text" placeholder="Waktu reaksi ke hujan"></div>
-      <div class="sop-item"><div class="num">9</div><div class="label">Resting / Conditioning Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>10-15 hari</option><option>15-30 hari</option><option>30-60 hari</option><option>Tidak diresting</option><option>Lainnya</option></select><input type="text" placeholder="Tempat resting"></div>
+      <div class="sop-item"><div class="num">6</div><div class="label">Target Moisture Content (MC) Akhir</div><select><option value="">-- Pilih --</option><option>Diukur tiap hari</option><option>Diukur 2x seminggu</option><option>Diukur saat keluar bed</option><option>Tidak diukur</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">7</div><div class="label">Frekuensi Turning / Pembalikan</div><select><option value="">-- Pilih --</option><option>Tiap 1 jam (hari 1-3)</option><option>Tiap 2 jam</option><option>Tiap 3 jam</option><option>Tiap 4 jam</option><option>2x sehari</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">8</div><div class="label">Proteksi Hujan</div><select><option value="">-- Pilih --</option><option>Cover plastic manual</option><option>Turunkan ke bawah</option><option>Greenhouse otomatis</option><option>Tidak ada proteksi</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">9</div><div class="label">Resting / Conditioning Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>10-15 hari</option><option>15-30 hari</option><option>30-60 hari</option><option>Tidak diresting</option><option>Lainnya</option></select></div>
     </div>
 
     <div class="sop-flow">
       <h4>🏭 D. SOP Dry Mill & Sorting</h4>
-      <div class="sop-item"><div class="num">10</div><div class="label">MC Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>Harus 10-12%</option><option>Harus 11-12%</option><option>Tidak dicek</option><option>Lainnya</option></select><input type="text" placeholder="Alat cek"></div>
-      <div class="sop-item"><div class="num">11</div><div class="label">Urutan Sorting</div><select><option value="">-- Pilih --</option><option>Suton → Size → Color → Hand Pick</option><option>Size → Suton → Color → Hand Pick</option><option>Color → Size → Hand Pick</option><option>Lainnya</option></select><input type="text" placeholder="Kustom"></div>
-      <div class="sop-item"><div class="num">12</div><div class="label">Standar Defect Akhir (bisa lebih dari satu)</div><div class="radio-group"><label><input type="checkbox" name="defect" value="specialty"> Specialty (0 defect)</label><label><input type="checkbox" name="defect" value="premium"> Premium (SCA Grade 1)</label><label><input type="checkbox" name="defect" value="grade1"> Grade 1 (commercial)</label><label><input type="checkbox" name="defect" value="grade2"> Grade 2</label><label><input type="checkbox" name="defect" value="lainnya"> Lainnya</label></div><input type="text" placeholder="Defect count per 350g / keterangan"></div>
-      <div class="sop-item"><div class="num">13</div><div class="label">Cross-Contamination Protocol</div><select><option value="">-- Pilih --</option><option>Vacuum + brush antar lot</option><option>Cuci + brush</option><option>Brush saja</option><option>Tidak ada</option><option>Lainnya</option></select><input type="text" placeholder="Frekuensi bersih"></div>
+      <div class="sop-item"><div class="num">10</div><div class="label">MC Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>Harus 10-12%</option><option>Harus 11-12%</option><option>Tidak dicek</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">11</div><div class="label">Urutan Sorting</div><select><option value="">-- Pilih --</option><option>Suton → Size → Color → Hand Pick</option><option>Size → Suton → Color → Hand Pick</option><option>Color → Size → Hand Pick</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">12</div><div class="label">Standar Defect Akhir (bisa lebih dari satu)</div><div class="radio-group"><label><input type="checkbox" name="defect" value="specialty"> Specialty (0 defect)</label><label><input type="checkbox" name="defect" value="premium"> Premium (SCA Grade 1)</label><label><input type="checkbox" name="defect" value="grade1"> Grade 1 (commercial)</label><label><input type="checkbox" name="defect" value="grade2"> Grade 2</label><label><input type="checkbox" name="defect" value="lainnya"> Lainnya</label></div></div>
+      <div class="sop-item"><div class="num">13</div><div class="label">Cross-Contamination Protocol</div><select><option value="">-- Pilih --</option><option>Vacuum + brush antar lot</option><option>Cuci + brush</option><option>Brush saja</option><option>Tidak ada</option><option>Lainnya</option></select></div>
     </div>
 
     <div class="sop-flow">
       <h4>📦 E. SOP Packaging & Storage</h4>
-      <div class="sop-item"><div class="num">14</div><div class="label">Packaging Green Bean</div><select><option value="">-- Pilih --</option><option>Jute bag baru</option><option>Jute + GrainPro</option><option>Vacuum seal</option><option>Hermetic (Cocoon)</option><option>PP woven</option><option>Lainnya</option></select><input type="text" placeholder="Ukuran (60kg/50kg)"></div>
-      <div class="sop-item"><div class="num">15</div><div class="label">Labeling & Lot Code</div><select><option value="">-- Pilih --</option><option>Print label lengkap</option><option>Tulis tangan</option><option>QR code</option><option>Tidak ada</option><option>Lainnya</option></select><input type="text" placeholder="Format kode"></div>
-      <div class="sop-item"><div class="num">16</div><div class="label">Warehouse Storage</div><select><option value="">-- Pilih --</option><option>Pallet + off-floor</option><option>Lantai beton</option><option>Tanah</option><option>Lainnya</option></select><input type="text" placeholder="Suhu & RH target"></div>
+      <div class="sop-item"><div class="num">14</div><div class="label">Packaging Green Bean</div><select><option value="">-- Pilih --</option><option>Jute bag baru</option><option>Jute + GrainPro</option><option>Vacuum seal</option><option>Hermetic (Cocoon)</option><option>PP woven</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">15</div><div class="label">Labeling & Lot Code</div><select><option value="">-- Pilih --</option><option>Print label lengkap</option><option>Tulis tangan</option><option>QR code</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      
     </div>
   </div>
 </div>
@@ -387,12 +383,14 @@
   <div class="section-header" onclick="toggleSection(this)"><h2>📎 8. Dokumen & Sertifikasi</h2><span class="badge">Opsional</span></div>
   <div class="section-body">
     <div class="meta-grid">
-      <div class="form-group"><label>NPWP Badan Usaha</label><input type="text"></div>
-      <div class="form-group"><label>NIB (Nomor Induk Berusaha)</label><input type="text"></div>
-      <div class="form-group"><label>SIUP / TDP</label><input type="text"></div>
+      
+      
+      
       <div class="form-group"><label>Sertifikasi Proses</label><select multiple size="3"><option>Organic</option><option>Fairtrade</option><option>Rainforest Alliance</option><option>4C</option><option>JAS</option><option>EU Organic</option><option>ISO 22000</option><option>Tidak ada</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Surat Keterangan Domisili Usaha (SKDU)</label><select><option>Ada</option><option>Tidak</option><option>Dalam proses</option><option>Lainnya</option></select></div>
-      <div class="form-group"><label>Izin Lingkungan (AMDAL / UKL-UPL)</label><select><option>Ada</option><option>Tidak</option><option>Dalam proses</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Pernah Export?</label><select><option value="">-- Pilih --</option><option>Sudah pernah export</option><option>Belum pernah export</option><option>Dalam proses (kontrak/surat perjanjian)</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Bersedia Diverifikasi?</label><select><option value="">-- Pilih --</option><option>Ya, bersedia diverifikasi lapangan</option><option>Ya, verifikasi dokumen saja</option><option>Belum bersedia</option><option>Lainnya</option></select></div>
+      
+      
       <div class="form-group"><label>Foto Gudang / Mill</label><input type="file" accept="image/*" multiple data-source="processor" data-field="fotoGudang"></div>
       <div class="form-group"><label>Foto Peralatan</label><input type="file" accept="image/*" multiple data-source="processor" data-field="fotoPeralatan"></div>
     </div>

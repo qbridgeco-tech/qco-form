@@ -90,6 +90,9 @@
   .modal-btn-ok:hover { opacity:0.9; }
   .modal-btn-cancel:hover { background:#d0d0d0; }
 
+  .checkbox-group { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .checkbox-group label { display:flex; align-items:center; gap:8px; font-weight:400; cursor:pointer; font-size:.88rem; padding:4px 0; }
+  .checkbox-group input[type="checkbox"] { width:18px; height:18px; accent-color:var(--primary); cursor:pointer; }
 </style>
 <base target="_blank">
 <base target="_blank">
@@ -119,7 +122,6 @@
     <div class="meta-grid">
       <div class="form-group"><label>Nama Processor / Wet Mill</label><input type="text" placeholder="Contoh: Koperasi Maju Jaya Wet Mill"></div>
       <div class="form-group"><label>Nama Resmi Badan Usaha</label><input type="text" placeholder="CV / PT / Koperasi / Perorangan"></div>
-      
       <div class="form-group"><label>Tahun Berdiri</label><input type="number" placeholder="2015"></div>
       <div class="form-group"><label>Alamat Lengkap</label><textarea placeholder="Jl. Kopi No. 1, Desa Sumber, Kecamatan Gayo Lues"></textarea></div>
       <div class="form-group"><label>Koordinat GPS (Lat, Long)</label><input type="text" placeholder="-3.5954, 97.1411"></div>
@@ -137,7 +139,6 @@
       <div class="form-group"><label>Nama Lengkap</label><input type="text" placeholder="Nama penanggung jawab"></div>
       <div class="form-group"><label>Jabatan</label><select><option value="">-- Pilih --</option><option>Direktur / Pemilik</option><option>Manager Processing</option><option>Ketua Koperasi</option><option>Supervisor Mill</option><option>Quality Control Manager</option><option>Lainnya</option></select></div>
       <div class="form-group"><label>Pengalaman di Industri Kopi (tahun)</label><input type="number" placeholder="10"></div>
-      
       <div class="form-group"><label>No. Telepon</label><input type="text" placeholder="0812-3456-7890"></div>
       <div class="form-group"><label>Email</label><input type="email" placeholder="nama@email.com"></div>
       <div class="form-group"><label>Alamat Domisili</label><textarea placeholder="Alamat lengkap penanggung jawab"></textarea></div>
@@ -283,8 +284,7 @@
     <div id="dry-greenhouse" class="conditional">
       <div class="subsection-title">🌿 Greenhouse Detail</div>
       <div class="meta-grid">
-        
-        <div class="form-group"><label>Climate Control?</label><select id="has-cc" onchange="toggleConditional('cc-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak</option></select></div>
+      <div class="form-group"><label>Climate Control?</label><select id="has-cc" onchange="toggleConditional('cc-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak</option></select></div>
         <div id="cc-detail" class="conditional">
           <div class="form-group"><label>Sistem Climate Control</label><select><option value="">-- Pilih --</option><option>Exhaust fan + vent</option><option>Misting system</option><option>Heater (mechanical dryer)</option><option>Full HVAC</option><option>Lainnya</option></select></div>
           <div class="form-group"><label>Suhu Target</label><input type="text" placeholder="30-35°C"></div>
@@ -383,14 +383,21 @@
   <div class="section-header" onclick="toggleSection(this)"><h2>📎 8. Dokumen & Sertifikasi</h2><span class="badge">Opsional</span></div>
   <div class="section-body">
     <div class="meta-grid">
-      
-      
-      
-      <div class="form-group"><label>Sertifikasi Proses</label><select multiple size="3"><option>Organic</option><option>Fairtrade</option><option>Rainforest Alliance</option><option>4C</option><option>JAS</option><option>EU Organic</option><option>ISO 22000</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Sertifikasi Proses (bisa pilih lebih dari satu)</label>
+          <div class="radio-group" style="flex-direction:column; align-items:flex-start; gap:8px; margin-top:8px;">
+            <label><input type="checkbox" name="sertifikasi_proses" value="Organic"> Organic</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="Fairtrade"> Fairtrade</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="Rainforest Alliance"> Rainforest Alliance</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="4C"> 4C</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="JAS"> JAS</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="EU Organic"> EU Organic</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="ISO 22000"> ISO 22000</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="Tidak ada"> Tidak ada</label>
+            <label><input type="checkbox" name="sertifikasi_proses" value="Lainnya"> Lainnya</label>
+          </div>
+        </div>
       <div class="form-group"><label>Pernah Export?</label><select><option value="">-- Pilih --</option><option>Sudah pernah export</option><option>Belum pernah export</option><option>Dalam proses (kontrak/surat perjanjian)</option><option>Lainnya</option></select></div>
       <div class="form-group"><label>Bersedia Diverifikasi?</label><select><option value="">-- Pilih --</option><option>Ya, bersedia diverifikasi lapangan</option><option>Ya, verifikasi dokumen saja</option><option>Belum bersedia</option><option>Lainnya</option></select></div>
-      
-      
       <div class="form-group"><label>Foto Gudang / Mill</label><input type="file" accept="image/*" multiple data-source="processor" data-field="fotoGudang"></div>
       <div class="form-group"><label>Foto Peralatan</label><input type="file" accept="image/*" multiple data-source="processor" data-field="fotoPeralatan"></div>
     </div>
@@ -606,7 +613,17 @@
           <div class="form-group"><label>Sistem Tanam</label><select><option value="">-- Pilih --</option><option>Monokultur</option><option>Agroforestri</option><option>Multi-cropping</option><option>Tumpang sari</option></select></div>
           <div class="form-group"><label>Pemupukan</label><select><option value="">-- Pilih --</option><option>100% Organik</option><option>Semi-organik</option><option>Konvensional</option><option>Tidak pernah</option></select></div>
           <div class="form-group"><label>Pestisida</label><select><option value="">-- Pilih --</option><option>Tidak pernah</option><option>Organik</option><option>Kimia terbatas</option><option>Kimia rutin</option></select></div>
-          <div class="form-group"><label>Sertifikasi</label><select multiple size="3"><option>Organic</option><option>Fairtrade</option><option>Rainforest Alliance</option><option>4C</option><option>Bird Friendly</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Sertifikasi (bisa pilih lebih dari satu)</label>
+          <div class="radio-group" style="flex-direction:column; align-items:flex-start; gap:8px; margin-top:8px;">
+            <label><input type="checkbox" name="sertifikasi_kebun" value="Organic"> Organic</label>
+            <label><input type="checkbox" name="sertifikasi_kebun" value="Fairtrade"> Fairtrade</label>
+            <label><input type="checkbox" name="sertifikasi_kebun" value="Rainforest Alliance"> Rainforest Alliance</label>
+            <label><input type="checkbox" name="sertifikasi_kebun" value="4C"> 4C</label>
+            <label><input type="checkbox" name="sertifikasi_kebun" value="Bird Friendly"> Bird Friendly</label>
+            <label><input type="checkbox" name="sertifikasi_kebun" value="Tidak ada"> Tidak ada</label>
+            <label><input type="checkbox" name="sertifikasi_kebun" value="Lainnya"> Lainnya</label>
+          </div>
+        </div>
         </div>
         <div class="subsection-title">🌧️ Iklim & Tanah</div>
         <div class="meta-grid">
@@ -679,9 +696,6 @@
 
 
 /* ===== TABS ===== */
-
-
-
 
 function goTab(n) {
   document.querySelectorAll('.tab-pane').forEach(function(p) { 

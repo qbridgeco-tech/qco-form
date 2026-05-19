@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q.co — Profil Processor & Kebun Kopi</title>
+<style>
+  :root { --primary:#2c5f2d; --primary-light:#97bc62; --accent:#d4a373; --bg:#f8f9fa; --card:#fff; --text:#333; --border:#dee2e6; --danger:#dc3545; --success:#198754; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .container { max-width:1100px; margin:0 auto; padding:20px; }
+  .tab-nav { display:flex; gap:8px; margin-bottom:24px; background:#fff; padding:8px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); border:1px solid var(--border); position:sticky; top:0; z-index:500; }
+  .tab-btn { flex:1; padding:14px 20px; border:none; border-radius:10px; cursor:pointer; font-size:1rem; font-weight:700; background:#f1f3f4; color:#555; transition:all .2s; }
+  .tab-btn:hover { background:#e8f5e9; color:var(--primary); }
+  .tab-btn.active { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; }
+  .tab-pane { display:none; }
+  .tab-pane.active { display:block; }
+  header { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; padding:30px 20px; border-radius:12px; margin-bottom:24px; text-align:center; }
+  header h1 { font-size:1.7rem; margin-bottom:6px; }
+  .section { background:var(--card); border-radius:12px; margin-bottom:20px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06); border:1px solid var(--border); }
+  .section-header { background:var(--primary); color:#fff; padding:14px 20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+  .section-header h2 { font-size:1.1rem; font-weight:600; }
+  .section-header .badge { background:rgba(255,255,255,0.2); padding:3px 10px; border-radius:20px; font-size:.75rem; }
+  .section-body { padding:24px; display:none; }
+  .section.active .section-body { display:block; }
+  .section-header::after { content:"▼"; font-size:.75rem; transition:transform .3s; }
+  .section.active .section-header::after { transform:rotate(180deg); }
+  .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-bottom:20px; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group label { font-weight:600; font-size:.85rem; color:var(--primary); }
+  .form-group input,.form-group select,.form-group textarea { padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:.9rem; }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(44,95,45,0.1); }
+  .form-group textarea { min-height:70px; resize:vertical; }
+  .subsection-title { font-size:1rem; font-weight:700; color:var(--primary); margin:20px 0 12px; padding-bottom:8px; border-bottom:2px solid var(--primary-light); }
+  .equipment-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .equipment-card { background:#fafafa; border:1px solid #eee; border-radius:10px; padding:16px; }
+  .equipment-card h4 { color:var(--primary); font-size:.95rem; margin-bottom:12px; }
+  .radio-group { display:flex; gap:16px; flex-wrap:wrap; margin-top:6px; }
+  .radio-group label { display:flex; align-items:center; gap:6px; font-weight:400; cursor:pointer; font-size:.88rem; }
+  .conditional { display:none; }
+  .conditional.show { display:block; }
+  .entity-conditional { display:none; }
+  .entity-conditional.show { display:block; }
+  .btn { padding:8px 16px; border:none; border-radius:6px; cursor:pointer; font-size:.85rem; font-weight:600; }
+  .btn-add { background:var(--success); color:#fff; }
+  .btn-remove { background:var(--danger); color:#fff; }
+  .btn-generate { background:var(--primary); color:#fff; padding:12px 24px; font-size:1rem; }
+  .btn-save { background:var(--primary); color:#fff; padding:14px 40px; font-size:1rem; margin-top:20px; }
+  .btn-delete-kebun { background:var(--danger); color:#fff; padding:6px 14px; font-size:.8rem; border:none; cursor:pointer; border-radius:6px; }
+  .sop-flow { background:#e8f5e9; border-left:4px solid var(--primary); padding:16px; border-radius:8px; margin:12px 0; }
+  .sop-flow h4 { color:var(--primary); margin-bottom:10px; font-size:.95rem; }
+  .sop-item { display:grid; grid-template-columns:30px 1fr 200px 200px; gap:10px; align-items:center; padding:10px; background:#fff; border-radius:6px; margin-bottom:8px; border:1px solid #e0e0e0; }
+  .sop-item .num { font-weight:700; color:var(--primary); }
+  .sop-item select,.sop-item input { padding:6px; border:1px solid var(--border); border-radius:6px; font-size:.85rem; width:100%; }
+  .table-dynamic { width:100%; border-collapse:collapse; margin:12px 0; font-size:.85rem; }
+  .table-dynamic th { background:var(--primary-light); color:#fff; padding:8px; text-align:left; font-weight:600; }
+  .table-dynamic td { padding:6px; border-bottom:1px solid var(--border); }
+  .table-dynamic input,.table-dynamic select { width:100%; padding:5px; border:1px solid var(--border); border-radius:5px; font-size:.82rem; }
+  .kebun-master { background:#fff; border:2px solid var(--primary-light); border-radius:12px; padding:24px; margin-bottom:24px; }
+  .kebun-master h3 { color:var(--primary); margin-bottom:16px; font-size:1.1rem; }
+  .kebun-instance { background:var(--card); border-radius:12px; margin-bottom:24px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); border:1px solid var(--border); }
+  .kebun-instance-header { background:var(--primary-light); color:#fff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; }
+  .kebun-instance-header h3 { font-size:1rem; font-weight:600; }
+  .kebun-instance-body { padding:20px; }
+  .kebun-number-badge { background:rgba(255,255,255,0.25); padding:4px 12px; border-radius:20px; font-size:.85rem; font-weight:700; }
+  .print-btn { position:fixed; bottom:24px; right:24px; background:var(--accent); color:#333; padding:14px 24px; border-radius:50px; box-shadow:0 4px 12px rgba(0,0,0,0.2); cursor:pointer; font-weight:700; z-index:1000; border:none; }
+  @media (max-width:768px) {
+    .tab-nav { flex-direction:column; }
+    .sop-item { grid-template-columns:1fr; }
+    .meta-grid { grid-template-columns:1fr; }
+    .equipment-grid { grid-template-columns:1fr; }
+  }
+  @media print { 
+    .tab-nav { display:none; } 
+    .tab-pane { display:block!important; } 
+    .print-btn,.btn-add,.btn-remove,.btn-delete-kebun { display:none; }
+    .section-body { display:block!important; }
+  }
+
+  /* ===== CUSTOM MODAL ===== */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; display:none; justify-content:center; align-items:center; }
+  .modal-overlay.show { display:flex; }
+  .modal-box { background:#fff; border-radius:12px; padding:24px; max-width:420px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2); text-align:center; }
+  .modal-box h3 { color:var(--primary); margin-bottom:12px; font-size:1.1rem; }
+  .modal-box p { color:#555; margin-bottom:20px; line-height:1.5; white-space:pre-line; }
+  .modal-actions { display:flex; gap:12px; justify-content:center; }
+  .modal-actions button { padding:10px 24px; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+  .modal-btn-ok { background:var(--primary); color:#fff; }
+  .modal-btn-cancel { background:#e0e0e0; color:#333; }
+  .modal-btn-ok:hover { opacity:0.9; }
+  .modal-btn-cancel:hover { background:#d0d0d0; }
+
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="container">
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="goTab(0)">🏭 Profil Processor</button>
+  <button class="tab-btn" onclick="goTab(1)">🌱 Profil Kebun</button>
+</div>
+
+
+<!-- TAB 0: PROCESSOR -->
+<div class="tab-pane active" id="pane-0" style="display:block;">
+<div class="container">
+<header>
+  <h1>🏭 Form Profil Processor Kopi</h1>
+  <p>Registrasi Fasilitas, Peralatan, SDM & SOP Processing — Q.co Traceability System</p>
+</header>
+
+<!-- SECTION 1: IDENTITAS PROCESSOR -->
+<div class="section active">
+  <div class="section-header" onclick="toggleSection(this)"><h2>📋 1. Identitas Processor</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="meta-grid">
+      <div class="form-group"><label>Nama Processor / Wet Mill</label><input type="text" placeholder="Contoh: Koperasi Maju Jaya Wet Mill"></div>
+      <div class="form-group"><label>Nama Resmi Badan Usaha</label><input type="text" placeholder="CV / PT / Koperasi / Perorangan"></div>
+      <div class="form-group"><label>No. Izin / NIB / AHU</label><input type="text" placeholder="NIB atau nomor registrasi"></div>
+      <div class="form-group"><label>Tahun Berdiri</label><input type="number" placeholder="2015"></div>
+      <div class="form-group"><label>Alamat Lengkap</label><textarea placeholder="Jl. Kopi No. 1, Desa Sumber, Kecamatan Gayo Lues"></textarea></div>
+      <div class="form-group"><label>Koordinat GPS (Lat, Long)</label><input type="text" placeholder="-3.5954, 97.1411"></div>
+      <div class="form-group"><label>Kontak Telepon / WhatsApp</label><input type="text" placeholder="0812-3456-7890"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="processor@email.com"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: PENANGGUNG JAWAB -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>👤 2. Penanggung Jawab (Biodata)</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="meta-grid">
+      <div class="form-group"><label>Nama Lengkap</label><input type="text" placeholder="Nama penanggung jawab"></div>
+      <div class="form-group"><label>NIK</label><input type="text" placeholder="Nomor Induk Kependudukan"></div>
+      <div class="form-group"><label>Jabatan</label><select><option value="">-- Pilih --</option><option>Direktur / Pemilik</option><option>Manager Processing</option><option>Ketua Koperasi</option><option>Supervisor Mill</option><option>Quality Control Manager</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Tempat, Tanggal Lahir</label><input type="text" placeholder="Banda Aceh, 15 Agustus 1985"></div>
+      <div class="form-group"><label>Pendidikan Terakhir</label><select><option value="">-- Pilih --</option><option>SMA / SMK</option><option>D1/D2</option><option>S1</option><option>S2</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Bidang Studi / Keahlian</label><input type="text" placeholder="Teknik Pertanian / Food Technology"></div>
+      <div class="form-group"><label>Pengalaman di Industri Kopi (tahun)</label><input type="number" placeholder="10"></div>
+      <div class="form-group"><label>Sertifikasi Keahlian</label><input type="text" placeholder="Q Grader, Roaster, Processing, dll"></div>
+      <div class="form-group"><label>No. Telepon</label><input type="text" placeholder="0812-3456-7890"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="nama@email.com"></div>
+      <div class="form-group"><label>Alamat Domisili</label><textarea placeholder="Alamat lengkap penanggung jawab"></textarea></div>
+      <div class="form-group"><label>Foto KTP / Tanda Tangan Digital</label><input type="file" accept="image/*" data-source="processor" data-field="fotoKtp"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: FASILITAS GUDANG -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>🏚️ 3. Fasilitas Gudang & Rambang</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="meta-grid">
+      <div class="form-group"><label>Jumlah Gudang / Unit</label><input type="number" placeholder="2"></div>
+      <div class="form-group"><label>Total Kapasitas Gudang (ton)</label><input type="text" placeholder="50 ton"></div>
+      <div class="form-group"><label>Material Lantai Gudang</label><select><option value="">-- Pilih --</option><option>Cor beton</option><option>Ubin keramik</option><option>Lantai tanah</option><option>Kayu / pallet</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Ventilasi Gudang</label><select><option value="">-- Pilih --</option><option>Alami (jendela/lubang)</option><option>Mechanical (exhaust fan)</option><option>Kombinasi</option><option>Terbatas</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Sistem Pengelolaan Suhu Gudang</label><select><option value="">-- Pilih --</option><option>Climate control (AC/cooler)</option><option>Insulasi dinding</option><option>Ventilasi alami</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Kondisi Gudang</label><select><option value="">-- Pilih --</option><option>Baru / sangat baik</option><option>Baik</option><option>Cukup (perlu perbaikan)</option><option>Kurang</option><option>Lainnya</option></select></div>
+    </div>
+    <div class="subsection-title">📐 Spesifikasi Rambang (Cherry Receiving Area)</div>
+    <div class="meta-grid">
+      <div class="form-group"><label>Ukuran Rambang (Panjang x Lebar x Tinggi)</label><input type="text" placeholder="6m x 4m x 1m"></div>
+      <div class="form-group"><label>Material Rambang</label><select><option value="">-- Pilih --</option><option>Beton cor</option><option>Cor + keramik</option><option>Stainless steel</option><option>Plastik food-grade</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Kapasitas Rambang (kg cherry)</label><input type="text" placeholder="2000 kg"></div>
+      <div class="form-group"><label>Drainase / Sistem Buang Air</label><select><option value="">-- Pilih --</option><option>Drainase + sedimentasi</option><option>Langsung ke selokan</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Cover / Atap Rambang</label><select><option value="">-- Pilih --</option><option>Atap seng permanen</option><option>Paranet / shade net</option><option>Tenda darurat</option><option>Tidak ada (terbuka)</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Alat Timbang Cherry</label><select><option value="">-- Pilih --</option><option>Timbangan digital tersertifikasi</option><option>Timbangan digital biasa</option><option>Timbangan gantung</option><option>Timbangan manual</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: PERALATAN -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>⚙️ 4. Peralatan Processing</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="equipment-grid">
+      <!-- PULPER -->
+      <div class="equipment-card">
+        <h4>🔧 Mesin Pulper (Depulper)</h4>
+        <div class="form-group"><label>Memiliki Pulper?</label><select onchange="toggleConditional('pulper-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (manual / outsource)</option></select></div>
+        <div id="pulper-detail" class="conditional">
+          <div class="form-group"><label>Jenis Pulper</label><select><option value="">-- Pilih --</option><option>Disk Pulper (horizontal)</option><option>Drum Pulper</option><option>Lori Pulper</option><option>Hand crank (manual)</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Penagos MC-5"></div>
+          <div class="form-group"><label>Kapasitas (kg cherry/jam)</label><input type="text" placeholder="500 kg/jam"></div>
+          <div class="form-group"><label>Jumlah Unit</label><input type="number" placeholder="2"></div>
+          <div class="form-group"><label>Tahun Pembelian</label><input type="number" placeholder="2020"></div>
+          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu perbaikan</option><option>Rusak</option><option>Lainnya</option></select></div>
+        </div>
+      </div>
+      <!-- DEMUCILAGER -->
+      <div class="equipment-card">
+        <h4>🫧 Demucilager / Mucilage Remover</h4>
+        <div class="form-group"><label>Memiliki Demucilager?</label><select onchange="toggleConditional('demucilager-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (fermentasi air manual)</option></select></div>
+        <div id="demucilager-detail" class="conditional">
+          <div class="form-group"><label>Jenis</label><select><option value="">-- Pilih --</option><option>Mechanical demucilager</option><option>Penagos eco-pulper</option><option>Penagos MC-5 (integrated)</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Penagos DML-5"></div>
+          <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="300 kg/jam"></div>
+          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Rusak</option><option>Lainnya</option></select></div>
+        </div>
+      </div>
+      <!-- HULLER -->
+      <div class="equipment-card">
+        <h4>🏭 Mesin Huller (Penggiling Kering)</h4>
+        <div class="form-group"><label>Memiliki Huller?</label><select onchange="toggleConditional('huller-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (outsource / manual)</option></select></div>
+        <div id="huller-detail" class="conditional">
+          <div class="form-group"><label>Jenis Huller</label><select><option value="">-- Pilih --</option><option>Friction huller (basah/kering)</option><option>Impact huller</option><option>Disk huller</option><option>Combined huller-polisher</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Satake"></div>
+          <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="200 kg/jam"></div>
+          <div class="form-group"><label>Daya (HP / kW)</label><input type="text" placeholder="5 HP"></div>
+          <div class="form-group"><label>Jumlah Unit</label><input type="number" placeholder="1"></div>
+          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu service</option><option>Lainnya</option></select></div>
+        </div>
+      </div>
+      <!-- SUTON -->
+      <div class="equipment-card">
+        <h4>🌊 Mesin Suton (Density / Water Sorting)</h4>
+        <div class="form-group"><label>Memiliki Suton?</label><select onchange="toggleConditional('suton-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (manual / outsource)</option></select></div>
+        <div id="suton-detail" class="conditional">
+          <div class="form-group"><label>Jenis Suton</label><select><option value="">-- Pilih --</option><option>Water tank (static)</option><option>Water tank (flowing)</option><option>Air separator (Oliver table)</option><option>Density separator</option><option>Manual (ember/tong)</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Kapasitas (kg/batch)</label><input type="text" placeholder="100 kg"></div>
+          <div class="form-group"><label>Jumlah Grade</label><select><option>2 grade</option><option>3 grade</option><option>4 grade</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Kurang</option><option>Lainnya</option></select></div>
+        </div>
+      </div>
+      <!-- SIZE GRADER -->
+      <div class="equipment-card">
+        <h4>📏 Mesin Size Grading (Screen)</h4>
+        <div class="form-group"><label>Memiliki Size Grader?</label><select onchange="toggleConditional('size-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (manual / outsource)</option></select></div>
+        <div id="size-detail" class="conditional">
+          <div class="form-group"><label>Jenis</label><select><option value="">-- Pilih --</option><option>Oscillating wire mesh</option><option>Slotted screen</option><option>Rotary drum grader</option><option>Hand screen (manual)</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Buhler"></div>
+          <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="150 kg/jam"></div>
+          <div class="form-group"><label>Screen Size Tersedia</label><input type="text" placeholder="12, 13, 14, 15, 16, 17, 18"></div>
+          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Mesh perlu ganti</option><option>Lainnya</option></select></div>
+        </div>
+      </div>
+      <!-- COLOR SORTER -->
+      <div class="equipment-card">
+        <h4>🎨 Color Sorter (Optical Sorting)</h4>
+        <div class="form-group"><label>Memiliki Color Sorter?</label><select onchange="toggleConditional('color-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (hand pick / outsource)</option></select></div>
+        <div id="color-detail" class="conditional">
+          <div class="form-group"><label>Merk / Model</label><input type="text" placeholder="Contoh: Satake SNJ, Buhler Sortex"></div>
+          <div class="form-group"><label>Kapasitas (kg/jam)</label><input type="text" placeholder="500 kg/jam"></div>
+          <div class="form-group"><label>Teknologi Sensor</label><select><option>RGB camera</option><option>RGB + Infrared</option><option>Full spectrum</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Tahun Pembelian</label><input type="number" placeholder="2022"></div>
+          <div class="form-group"><label>Kondisi</label><select><option>Baik</option><option>Cukup</option><option>Perlu kalibrasi</option><option>Lainnya</option></select></div>
+        </div>
+      </div>
+      <!-- HAND PICK TABLE -->
+      <div class="equipment-card">
+        <h4>✋ Hand Pick Table / Sorting Belt</h4>
+        <div class="form-group"><label>Memiliki Meja / Belt Sorting?</label><select onchange="toggleConditional('handpick-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak (sorting di lantai / karung)</option></select></div>
+        <div id="handpick-detail" class="conditional">
+          <div class="form-group"><label>Jenis</label><select><option value="">-- Pilih --</option><option>Conveyor belt sorting</option><option>Static table (meja diam)</option><option>Rotary table</option><option>Lantai khusus</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Panjang / Ukuran</label><input type="text" placeholder="3m x 1m"></div>
+          <div class="form-group"><label>Pencahayaan (Lux)</label><input type="text" placeholder="1000 lux LED"></div>
+          <div class="form-group"><label>Jumlah Sortir simultan</label><input type="number" placeholder="4 orang"></div>
+        </div>
+      </div>
+      <!-- MOISTURE METER -->
+      <div class="equipment-card">
+        <h4>📊 Moisture Meter & Alat Ukur</h4>
+        <div class="form-group"><label>Moisture Meter</label><select><option value="">-- Pilih --</option><option>Digital (Draminski, Delmhorst, dll)</option><option>Analog</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Refraktometer (Brix)</label><select><option value="">-- Pilih --</option><option>Digital</option><option>Manual</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Thermometer / Hygrometer</label><select><option value="">-- Pilih --</option><option>Digital data logger</option><option>Digital biasa</option><option>Analog</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Timbangan</label><select><option value="">-- Pilih --</option><option>Digital tersertifikasi</option><option>Digital biasa</option><option>Analog</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: TEMPAT JEMUR -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>☀️ 5. Fasilitas Jemur (Drying)</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="meta-grid">
+      <div class="form-group"><label>Tipe Jemur Utama</label><select id="dry-type" onchange="toggleDrySections()"><option value="">-- Pilih --</option><option value="floor">Floor Drying (Patio / Lantai)</option><option value="raised">Raised Bed (African Bed)</option><option value="greenhouse">Greenhouse (Tanpa Climate Control)</option><option value="greenhouse-cc">Greenhouse + Climate Control</option><option value="mechanical">Mechanical / Rotary Dryer</option><option value="mixed">Kombinasi (lebih dari satu)</option><option value="lainnya">Lainnya</option></select></div>
+      <div class="form-group"><label>Total Kapasitas Jemur (kg cherry/batch)</label><input type="text" placeholder="5000 kg"></div>
+      <div class="form-group"><label>Jumlah Unit / Bed</label><input type="number" placeholder="10 bed"></div>
+      <div class="form-group"><label>Material Permukaan</label><select><option value="">-- Pilih --</option><option>Wire mesh stainless</option><option>Wire mesh plastik</option><option>Bambu / kayu</option><option>Cor beton</option><option>Tanah (lumpur)</option><option>Lainnya</option></select></div>
+    </div>
+    <div id="dry-floor" class="conditional">
+      <div class="subsection-title">🏠 Floor Drying Detail</div>
+      <div class="meta-grid">
+        <div class="form-group"><label>Material Lantai</label><select><option value="">-- Pilih --</option><option>Cor beton</option><option>Ubin</option><option>Tanah</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Cover saat Hujan</label><select><option value="">-- Pilih --</option><option>Plastic sheet manual</option><option>Tenda lipat</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Sistem Turning</label><select><option value="">-- Pilih --</option><option>Rake manual</option><option>Shovel</option><option>Tidak diaduk</option><option>Lainnya</option></select></div>
+      </div>
+    </div>
+    <div id="dry-raised" class="conditional">
+      <div class="subsection-title">🛏️ Raised Bed Detail</div>
+      <div class="meta-grid">
+        <div class="form-group"><label>Tinggi dari Tanah</label><input type="text" placeholder="80 cm"></div>
+        <div class="form-group"><label>Ukuran per Bed</label><input type="text" placeholder="3m x 1.5m"></div>
+        <div class="form-group"><label>Material Kaki</label><select><option value="">-- Pilih --</option><option>Kayu keras</option><option>Bambu</option><option>Besi / galvanis</option><option>Beton</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Atap / Paranet</label><select><option value="">-- Pilih --</option><option>Paranet 50%</option><option>Paranet 75%</option><option>Plastik UV (hujan)</option><option>Tidak ada atap</option><option>Lainnya</option></select></div>
+      </div>
+    </div>
+    <div id="dry-greenhouse" class="conditional">
+      <div class="subsection-title">🌿 Greenhouse Detail</div>
+      <div class="meta-grid">
+        <div class="form-group"><label>Struktur</label><select><option value="">-- Pilih --</option><option>Baja ringan + plastik UV</option><option>Aluminium + polycarbonate</option><option>Bambu + plastik</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Climate Control?</label><select id="has-cc" onchange="toggleConditional('cc-detail',this.value)"><option value="">-- Pilih --</option><option value="ya">Ya</option><option value="tidak">Tidak</option></select></div>
+        <div id="cc-detail" class="conditional">
+          <div class="form-group"><label>Sistem Climate Control</label><select><option value="">-- Pilih --</option><option>Exhaust fan + vent</option><option>Misting system</option><option>Heater (mechanical dryer)</option><option>Full HVAC</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Suhu Target</label><input type="text" placeholder="30-35°C"></div>
+          <div class="form-group"><label>RH Target</label><input type="text" placeholder="< 60%"></div>
+        </div>
+        <div class="form-group"><label>Sistem Turning</label><select><option value="">-- Pilih --</option><option>Manual (rake)</option><option>Semi-mechanical</option><option>Conveyor belt</option><option>Lainnya</option></select></div>
+      </div>
+    </div>
+    <div id="dry-mechanical" class="conditional">
+      <div class="subsection-title">⚙️ Mechanical Dryer Detail</div>
+      <div class="meta-grid">
+        <div class="form-group"><label>Jenis Dryer</label><select><option value="">-- Pilih --</option><option>Rotary drum</option><option>Fluidized bed</option><option>Tray dryer</option><option>Solar dryer (box)</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Bahan Bakar</label><select><option value="">-- Pilih --</option><option>Kayu / biomassa</option><option>Gas LPG</option><option>Diesel / solar</option><option>Listrik</option><option>Solar panel</option><option>Lainnya</option></select></div>
+        <div class="form-group"><label>Kapasitas (kg/batch)</label><input type="text" placeholder="1000 kg"></div>
+        <div class="form-group"><label>Durasi Drying</label><input type="text" placeholder="24-48 jam"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: SOP -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>📜 6. SOP (Standard Operating Procedure)</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="sop-flow">
+      <h4>📥 A. Penerimaan Cherry (Receiving)</h4>
+      <div class="sop-item"><div class="num">1</div><div class="label">Sumber Pembelian Cherry</div><select><option value="">-- Pilih --</option><option>Petani perorangan</option><option>Kelompok tani</option><option>Koperasi</option><option>Collector / broker</option><option>Campuran</option><option>Lainnya</option></select><input type="text" placeholder="Contoh: 80% petani langsung"></div>
+      <div class="sop-item"><div class="num">2</div><div class="label">Metode Timbang Cherry</div><select><option value="">-- Pilih --</option><option>Timbang di rambang</option><option>Timbang di kebun (petik)</option><option>Timbang saat delivery</option><option>Tidak ditimbang (perkiraan)</option><option>Lainnya</option></select><input type="text" placeholder="Alat timbang"></div>
+      <div class="sop-item"><div class="num">3</div><div class="label">Pembayaran Cherry</div><select><option value="">-- Pilih --</option><option>Tunai saat serah</option><option>Transfer harian</option><option>Transfer mingguan</option><option>Transfer bulanan</option><option>Bagi hasil</option><option>Lainnya</option></select><input type="text" placeholder="Harga per kg"></div>
+      <div class="sop-item"><div class="num">4</div><div class="label">Maksimal Waktu Cherry Sampai Rambang</div><select><option value="">-- Pilih --</option><option>< 4 jam</option><option>4-8 jam</option><option>8-12 jam</option><option>12-24 jam</option><option>> 24 jam (tidak diterima)</option><option>Lainnya</option></select><input type="text" placeholder="Sanksi jika terlambat"></div>
+      <div class="sop-item"><div class="num">5</div><div class="label">Seleksi Cherry di Rambang</div><select><option value="">-- Pilih --</option><option>Semua diterima</option><option>Sortir manual (reject underripe)</option><option>Float tank</option><option>Brix test + visual</option><option>Lainnya</option></select><input type="text" placeholder="Standar minimal °Brix"></div>
+    </div>
+
+    <div class="sop-flow">
+      <h4>⚙️ B. Proses Pengolahan (Processing Protocol)</h4>
+      <div class="form-group"><label>Metode Processing yang Diterapkan (bisa lebih dari satu)</label>
+        <div class="radio-group">
+          <label><input type="checkbox" name="proc" value="wh"> Wet Hulled</label>
+          <label><input type="checkbox" name="proc" value="fw"> Full Washed</label>
+          <label><input type="checkbox" name="proc" value="hn"> Honey</label>
+          <label><input type="checkbox" name="proc" value="nt"> Natural</label>
+          <label><input type="checkbox" name="proc" value="wn"> Wine / Extended Ferment</label>
+          <label><input type="checkbox" name="proc" value="ex"> Experimental (Anaerobic, CM, dll)</label>
+          <label><input type="checkbox" name="proc" value="ln"> Lainnya</label>
+        </div>
+      </div>
+      <div class="form-group"><label>Protokol Wet Hulled<small>Jika menerapkan</small></label><textarea placeholder="Durasi fermentasi, kali bilas, durasi ke hulling, target MC sebelum hull..."></textarea></div>
+      <div class="form-group"><label>Protokol Full Washed<small>Jika menerapkan</small></label><textarea placeholder="Float tank, durasi fermentasi, bilasan, grading channel..."></textarea></div>
+      <div class="form-group"><label>Protokol Honey<small>Jika menerapkan</small></label><textarea placeholder="% mucilage, setting demucilager, turning frequency..."></textarea></div>
+      <div class="form-group"><label>Protokol Natural<small>Jika menerapkan</small></label><textarea placeholder="Sorting pre-dry, layer thickness, turning, drying duration..."></textarea></div>
+      <div class="form-group"><label>Protokol Wine / Extended Ferment<small>Jika menerapkan</small></label><textarea placeholder="Durasi fermentasi, monitoring brix/pH, emergency stop..."></textarea></div>
+      <div class="form-group"><label>Protokol Experimental<small>Jika menerapkan</small></label><textarea placeholder="Tank condition, inokulasi, CO2/O2 monitoring, temperature control..."></textarea></div>
+    </div>
+
+    <div class="sop-flow">
+      <h4>☀️ C. SOP Jemur (Drying SOP)</h4>
+      <div class="sop-item"><div class="num">6</div><div class="label">Target Moisture Content (MC) Akhir</div><input type="text" placeholder="10.5-11.5%"><select><option value="">-- Pilih --</option><option>Diukur tiap hari</option><option>Diukur 2x seminggu</option><option>Diukur saat keluar bed</option><option>Tidak diukur</option><option>Lainnya</option></select></div>
+      <div class="sop-item"><div class="num">7</div><div class="label">Frekuensi Turning / Pembalikan</div><select><option value="">-- Pilih --</option><option>Tiap 1 jam (hari 1-3)</option><option>Tiap 2 jam</option><option>Tiap 3 jam</option><option>Tiap 4 jam</option><option>2x sehari</option><option>Lainnya</option></select><input type="text" placeholder="Jam pembalikan"></div>
+      <div class="sop-item"><div class="num">8</div><div class="label">Proteksi Hujan</div><select><option value="">-- Pilih --</option><option>Cover plastic manual</option><option>Turunkan ke bawah</option><option>Greenhouse otomatis</option><option>Tidak ada proteksi</option><option>Lainnya</option></select><input type="text" placeholder="Waktu reaksi ke hujan"></div>
+      <div class="sop-item"><div class="num">9</div><div class="label">Resting / Conditioning Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>10-15 hari</option><option>15-30 hari</option><option>30-60 hari</option><option>Tidak diresting</option><option>Lainnya</option></select><input type="text" placeholder="Tempat resting"></div>
+    </div>
+
+    <div class="sop-flow">
+      <h4>🏭 D. SOP Dry Mill & Sorting</h4>
+      <div class="sop-item"><div class="num">10</div><div class="label">MC Sebelum Hulling</div><select><option value="">-- Pilih --</option><option>Harus 10-12%</option><option>Harus 11-12%</option><option>Tidak dicek</option><option>Lainnya</option></select><input type="text" placeholder="Alat cek"></div>
+      <div class="sop-item"><div class="num">11</div><div class="label">Urutan Sorting</div><select><option value="">-- Pilih --</option><option>Suton → Size → Color → Hand Pick</option><option>Size → Suton → Color → Hand Pick</option><option>Color → Size → Hand Pick</option><option>Lainnya</option></select><input type="text" placeholder="Kustom"></div>
+      <div class="sop-item"><div class="num">12</div><div class="label">Standar Defect Akhir</div><select><option value="">-- Pilih --</option><option>Specialty (0 defect)</option><option>Premium (SCA Grade 1)</option><option>Grade 1 (commercial)</option><option>Grade 2</option><option>Lainnya</option></select><input type="text" placeholder="Defect count per 350g"></div>
+      <div class="sop-item"><div class="num">13</div><div class="label">Cross-Contamination Protocol</div><select><option value="">-- Pilih --</option><option>Vacuum + brush antar lot</option><option>Cuci + brush</option><option>Brush saja</option><option>Tidak ada</option><option>Lainnya</option></select><input type="text" placeholder="Frekuensi bersih"></div>
+    </div>
+
+    <div class="sop-flow">
+      <h4>📦 E. SOP Packaging & Storage</h4>
+      <div class="sop-item"><div class="num">14</div><div class="label">Packaging Green Bean</div><select><option value="">-- Pilih --</option><option>Jute bag baru</option><option>Jute + GrainPro</option><option>Vacuum seal</option><option>Hermetic (Cocoon)</option><option>PP woven</option><option>Lainnya</option></select><input type="text" placeholder="Ukuran (60kg/50kg)"></div>
+      <div class="sop-item"><div class="num">15</div><div class="label">Labeling & Lot Code</div><select><option value="">-- Pilih --</option><option>Print label lengkap</option><option>Tulis tangan</option><option>QR code</option><option>Tidak ada</option><option>Lainnya</option></select><input type="text" placeholder="Format kode"></div>
+      <div class="sop-item"><div class="num">16</div><div class="label">Warehouse Storage</div><select><option value="">-- Pilih --</option><option>Pallet + off-floor</option><option>Lantai beton</option><option>Tanah</option><option>Lainnya</option></select><input type="text" placeholder="Suhu & RH target"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: SDM PROCESSOR -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>👷 7. Tenaga Kerja Processor (per Fungsi)</h2><span class="badge">Wajib</span></div>
+  <div class="section-body">
+    <div class="meta-grid">
+      <div class="form-group"><label>Total Pekerja Tetap</label><input type="number" placeholder="5"></div>
+      <div class="form-group"><label>Total Buruh Harian (peak season)</label><input type="number" placeholder="25"></div>
+      <div class="form-group"><label>Total Buruh Harian (low season)</label><input type="number" placeholder="8"></div>
+      <div class="form-group"><label>Outsource / Third Party?</label><select><option value="">-- Pilih --</option><option>Ya (sorting house, transport)</option><option>Tidak</option><option>Kadang</option><option>Lainnya</option></select></div>
+    </div>
+    <div class="subsection-title">Rekap Tenaga Kerja per Fungsi & Sistem Pembayaran</div>
+    <p style="font-size:.85rem; color:#666; margin-bottom:12px;">Isi jumlah orang per fungsi, klasifikasi SDM, sistem pembayaran, dan upah. Tambah baris jika ada fungsi lain.</p>
+    <table class="table-dynamic" id="sdm-processor">
+      <thead><tr><th>No</th><th>Fungsi / Tugas</th><th>Jumlah Orang</th><th>Klasifikasi SDM</th><th>Sistem Pembayaran</th><th>Catatan</th><th>Aksi</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button class="btn btn-add" onclick="addRow('sdm-processor')">+ Tambah Fungsi</button>
+  </div>
+</div>
+
+<!-- SECTION 8: DOKUMEN -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)"><h2>📎 8. Dokumen & Sertifikasi</h2><span class="badge">Opsional</span></div>
+  <div class="section-body">
+    <div class="meta-grid">
+      <div class="form-group"><label>NPWP Badan Usaha</label><input type="text"></div>
+      <div class="form-group"><label>NIB (Nomor Induk Berusaha)</label><input type="text"></div>
+      <div class="form-group"><label>SIUP / TDP</label><input type="text"></div>
+      <div class="form-group"><label>Sertifikasi Proses</label><select multiple size="3"><option>Organic</option><option>Fairtrade</option><option>Rainforest Alliance</option><option>4C</option><option>JAS</option><option>EU Organic</option><option>ISO 22000</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Surat Keterangan Domisili Usaha (SKDU)</label><select><option>Ada</option><option>Tidak</option><option>Dalam proses</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Izin Lingkungan (AMDAL / UKL-UPL)</label><select><option>Ada</option><option>Tidak</option><option>Dalam proses</option><option>Lainnya</option></select></div>
+      <div class="form-group"><label>Foto Gudang / Mill</label><input type="file" accept="image/*" multiple data-source="processor" data-field="fotoGudang"></div>
+      <div class="form-group"><label>Foto Peralatan</label><input type="file" accept="image/*" multiple data-source="processor" data-field="fotoPeralatan"></div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; margin:30px 0;">
+  <button class="btn btn-save" onclick="testGasConnection()" style="background:#6c757d; margin-right:10px;">🔌 Test Koneksi GAS</button><button id="btn-save-processor" class="btn btn-save" onclick="submitToSheets('processor')">💾 Simpan Form Processor ke Google Sheets</button>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
+</div>
+</div><!-- end pane-0 -->
+
+<!-- TAB 1: KEBUN -->
+<div class="tab-pane" id="pane-1" style="display:block !important; visibility:visible !important; opacity:1 !important;">
+<header>
+  <h1>🌱 Profil Kebun Kopi</h1>
+  <p>Registrasi Multi-Sumber Kebun & Produksi</p>
+</header>
+
+<div class="kebun-master">
+  <h3>📊 Pengaturan Sumber Kebun</h3>
+  <div class="meta-grid" style="grid-template-columns:1fr 1fr 1fr; align-items:end;">
+    <div class="form-group">
+      <label>Jumlah Sumber Kebun</label>
+      <input type="number" id="jumlah-kebun" min="1" max="50" value="1">
+    </div>
+    <div class="form-group">
+      <label>&nbsp;</label>
+      <button class="btn btn-generate" onclick="makeKebun()">🔄 Generate</button>
+    </div>
+    <div class="form-group">
+      <label>&nbsp;</label>
+      <button class="btn btn-add" onclick="addKebun()">+ Tambah 1</button>
+    </div>
+  </div>
+</div>
+
+<div id="kebun-box">
+<div class="kebun-instance" id="kebun-1">
+  <div class="kebun-instance-header">
+    <h3>🌱 Kebun Sumber #<span class="kebun-num">1</span></h3>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <span class="kebun-number-badge">Kebun <span class="kebun-num">1</span></span>
+      <button class="btn-delete-kebun" onclick="this.closest('.kebun-instance').remove()">🗑️ Hapus</button>
+    </div>
+  </div>
+  <div class="kebun-instance-body">
+
+    <div class="section active">
+      <div class="section-header" onclick="toggleSection(this)"><h2>📋 1. Identitas Pemilik / Kelompok</h2><span class="badge">Wajib</span></div>
+      <div class="section-body">
+        <div class="form-group" style="max-width:320px; margin-bottom:20px;">
+          <label>Bentuk Kelembagaan</label>
+          <select onchange="showEntity(this)">
+            <option value="">-- Pilih --</option>
+            <option value="perorangan">Petani Perorangan</option>
+            <option value="kelompok">Kelompok Tani / Gapoktan</option>
+            <option value="koperasi">Koperasi Produsen</option>
+            <option value="cvpt">CV / PT / Perusahaan</option>
+            <option value="plasma">Plasma / Kemitraan</option>
+            <option value="desa">BUMDes / Lembaga Desa</option>
+            <option value="organisasi">Organisasi Lainnya</option>
+          </select>
+        </div>
+        <div class="entity-perorangan entity-conditional">
+          <div class="subsection-title">👤 Data Petani Perorangan</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama Lengkap</label><input type="text" placeholder="Nama petani"></div>
+            <div class="form-group"><label>NIK</label><input type="text" placeholder="Nomor KTP"></div>
+            <div class="form-group"><label>Tempat, Tanggal Lahir</label><input type="text" placeholder="Banda Aceh, 10 Januari 1970"></div>
+            <div class="form-group"><label>No. Telepon / WhatsApp</label><input type="text" placeholder="0812-3456-7890"></div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="email@contoh.com"></div>
+            <div class="form-group"><label>Pendidikan Terakhir</label><select><option value="">-- Pilih --</option><option>Tidak sekolah</option><option>SD</option><option>SMP</option><option>SMA / SMK</option><option>D1/D2</option><option>S1</option><option>Lainnya</option></select></div>
+            <div class="form-group"><label>Pengalaman Bertani Kopi (tahun)</label><input type="number" placeholder="15"></div>
+            <div class="form-group"><label>Status Kepemilikan Lahan</label><select><option value="">-- Pilih --</option><option>Milik sendiri (sertifikat/SHM)</option><option>Milik sendiri (girik/adat)</option><option>Warisan</option><option>Sewa</option><option>Plasma / kemitraan</option><option>Bagi hasil</option></select></div>
+            <div class="form-group"><label>Jumlah Anggota Keluarga yang Bekerja di Kebun</label><input type="number" placeholder="3"></div>
+            <div class="form-group"><label>Foto KTP / Tanda Tangan</label><input type="file" accept="image/*" data-source="kebun" data-field="fotoKtp"></div>
+          </div>
+        </div>
+        <div class="entity-kelompok entity-conditional">
+          <div class="subsection-title">👥 Data Kelompok Tani</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama Kelompok Tani</label><input type="text" placeholder="Gapoktan Sumber Rejeki"></div>
+            <div class="form-group"><label>Nomor Registrasi / SK</label><input type="text" placeholder="No. SK pendirian"></div>
+            <div class="form-group"><label>Tahun Berdiri</label><input type="number" placeholder="2010"></div>
+            <div class="form-group"><label>Jumlah Anggota</label><input type="number" placeholder="25"></div>
+            <div class="form-group"><label>Jumlah Anggota Aktif (musim panen)</label><input type="number" placeholder="20"></div>
+            <div class="form-group"><label>Nama Ketua</label><input type="text"></div>
+            <div class="form-group"><label>Kontak Ketua</label><input type="text" placeholder="0812-3456-7890"></div>
+            <div class="form-group"><label>Sekretaris</label><input type="text" placeholder="Nama sekretaris"></div>
+            <div class="form-group"><label>Bendahara</label><input type="text" placeholder="Nama bendahara"></div>
+            <div class="form-group"><label>SK Pengurus?</label><select><option>Ya</option><option>Tidak</option><option>Dalam proses</option><option>Lainnya</option></select></div>
+            <div class="form-group"><label>Struktur Organisasi</label><select><option value="">-- Pilih --</option><option>Ketua, Sekretaris, Bendahara</option><option>+ Koordinator Area</option><option>+ Koordinator Pemasaran</option><option>Lengkap (divisi teknis, pemasaran, keuangan)</option></select></div>
+            <div class="form-group"><label>Frekuensi Rapat</label><select><option value="">-- Pilih --</option><option>Tiap bulan</option><option>Tiap 3 bulan</option><option>Tiap 6 bulan</option><option>Tidak rutin</option></select></div>
+          </div>
+          <div class="subsection-title">Daftar Anggota Utama</div>
+          <table class="table-dynamic">
+            <thead><tr><th>No</th><th>Nama</th><th>NIK</th><th>Luas Lahan (ha)</th><th>Varietas</th><th>Kontak</th><th>Aksi</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <button class="btn btn-add" onclick="addRowTable(this)">+ Tambah Anggota</button>
+        </div>
+        <div class="entity-koperasi entity-conditional">
+          <div class="subsection-title">🏛️ Data Koperasi</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama Koperasi</label><input type="text" placeholder="Koperasi Produsen Kopi"></div>
+            <div class="form-group"><label>Nomor Badan Hukum</label><input type="text" placeholder="No. BH"></div>
+            <div class="form-group"><label>Tahun Berdiri</label><input type="number" placeholder="2012"></div>
+            <div class="form-group"><label>Jumlah Anggota</label><input type="number" placeholder="150"></div>
+            <div class="form-group"><label>Nama Pengurus (Ketua)</label><input type="text"></div>
+            <div class="form-group"><label>Sekretaris</label><input type="text"></div>
+            <div class="form-group"><label>Bendahara</label><input type="text"></div>
+            <div class="form-group"><label>Manager Operasional</label><input type="text"></div>
+            <div class="form-group"><label>Kontak Koperasi</label><input type="text" placeholder="Telepon / email"></div>
+            <div class="form-group"><label>Punya wet mill sendiri?</label><select><option>Ya</option><option>Tidak</option><option>Sedang dibangun</option><option>Lainnya</option></select></div>
+          </div>
+        </div>
+        <div class="entity-cvpt entity-conditional">
+          <div class="subsection-title">🏢 Data CV / PT</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama Perusahaan</label><input type="text" placeholder="PT Kopi Lestari"></div>
+            <div class="form-group"><label>NPWP</label><input type="text"></div>
+            <div class="form-group"><label>NIB</label><input type="text"></div>
+            <div class="form-group"><label>Tahun Berdiri</label><input type="number" placeholder="2015"></div>
+            <div class="form-group"><label>Direktur</label><input type="text"></div>
+            <div class="form-group"><label>Kontak</label><input type="text" placeholder="Telepon / email"></div>
+            <div class="form-group"><label>Total Kebun (ha)</label><input type="text" placeholder="500 ha"></div>
+            <div class="form-group"><label>Kebun Sendiri / Plasma</label><select><option>100% sendiri</option><option>Inti-plasma</option><option>Campuran</option><option>Lainnya</option></select></div>
+          </div>
+        </div>
+        <div class="entity-plasma entity-conditional">
+          <div class="subsection-title">🤝 Data Plasma / Kemitraan</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama Inti (Perusahaan Induk)</label><input type="text" placeholder="PT Kopi Inti"></div>
+            <div class="form-group"><label>Nama Kelompok Plasma</label><input type="text" placeholder="Kelompok Plasma Sumber"></div>
+            <div class="form-group"><label>Jumlah Petani Plasma</label><input type="number" placeholder="50"></div>
+            <div class="form-group"><label>Total Luas Plasma (ha)</label><input type="text" placeholder="200 ha"></div>
+            <div class="form-group"><label>Kontak Manajer Kemitraan</label><input type="text" placeholder="0812-3456-7890"></div>
+            <div class="form-group"><label>Sistem Kemitraan</label><select><option value="">-- Pilih --</option><option>Bagi hasil</option><option>Harga tetap + premium</option><option>Pinjam pakai</option><option>Kontrak jual beli</option></select></div>
+          </div>
+        </div>
+        <div class="entity-desa entity-conditional">
+          <div class="subsection-title">🏘️ Data BUMDes</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama BUMDes</label><input type="text" placeholder="BUMDes Kopi Makmur"></div>
+            <div class="form-group"><label>Nama Desa</label><input type="text"></div>
+            <div class="form-group"><label>Kecamatan / Kabupaten</label><input type="text"></div>
+            <div class="form-group"><label>Kepala Desa</label><input type="text"></div>
+            <div class="form-group"><label>Jumlah Petani</label><input type="number" placeholder="30"></div>
+            <div class="form-group"><label>Kontak</label><input type="text" placeholder="Telepon / email"></div>
+          </div>
+        </div>
+        <div class="entity-organisasi entity-conditional">
+          <div class="subsection-title">🌐 Organisasi Lainnya</div>
+          <div class="meta-grid">
+            <div class="form-group"><label>Nama Organisasi</label><input type="text" placeholder="Yayasan / NGO"></div>
+            <div class="form-group"><label>Tipe</label><select><option>NGO / LSM</option><option>Yayasan</option><option>Komunitas</option><option>Asosiasi</option><option>Lainnya</option></select></div>
+            <div class="form-group"><label>Penanggung Jawab</label><input type="text"></div>
+            <div class="form-group"><label>Kontak</label><input type="text"></div>
+            <div class="form-group"><label>Jumlah Petani</label><input type="number" placeholder="40"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)"><h2>🗺️ 2. Lokasi & Spesifikasi Kebun</h2><span class="badge">Wajib</span></div>
+      <div class="section-body">
+        <div class="meta-grid">
+          <div class="form-group"><label>Alamat Lengkap</label><textarea placeholder="Jl., Desa, Kecamatan, Kabupaten, Provinsi"></textarea></div>
+          <div class="form-group"><label>Provinsi</label><select><option value="">-- Pilih --</option><option>Aceh</option><option>Sumatera Utara</option><option>Sumatera Barat</option><option>Lampung</option><option>Jawa Barat</option><option>Jawa Tengah</option><option>Bali</option><option>NTT</option><option>Sulawesi Selatan</option><option>Sulawesi Utara</option><option>Papua</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Kabupaten / Kota</label><input type="text" placeholder="Bener Meriah"></div>
+          <div class="form-group"><label>Kecamatan</label><input type="text" placeholder="Bandar"></div>
+          <div class="form-group"><label>Desa</label><input type="text" placeholder="Desa Sumber"></div>
+          <div class="form-group"><label>Dusun</label><input type="text" placeholder="Dusun Lestari"></div>
+        </div>
+        <div class="subsection-title">📍 Koordinat GPS</div>
+        <div class="meta-grid">
+          <div class="form-group"><label>Latitude</label><input type="text" placeholder="-3.5954"></div>
+          <div class="form-group"><label>Longitude</label><input type="text" placeholder="97.1411"></div>
+          <div class="form-group"><label>Elevation (mdpl)</label><input type="number" placeholder="1450"></div>
+          <div class="form-group"><label>Area (ha)</label><input type="text" placeholder="5.2 ha"></div>
+          <div class="form-group"><label>Upload GeoJSON / KML</label><input type="file" accept=".geojson,.kml,.kmz" data-source="kebun" data-field="geojsonKml"></div>
+          <div class="form-group"><label>Foto Drone</label><input type="file" accept="image/*" multiple data-source="kebun" data-field="fotoDrone"></div>
+        </div>
+        <div class="subsection-title">📐 Luas Lahan</div>
+        <div class="meta-grid">
+          <div class="form-group"><label>Total Luas (ha)</label><input type="text" placeholder="5.0 ha"></div>
+          <div class="form-group"><label>Luas Produktif (ha)</label><input type="text" placeholder="3.5 ha"></div>
+          <div class="form-group"><label>Luas Belum Produktif (ha)</label><input type="text" placeholder="1.0 ha"></div>
+          <div class="form-group"><label>Bentuk Lahan</label><select><option value="">-- Pilih --</option><option>Datar / undulating</option><option>Miring (terasering)</option><option>Gunung / curam</option><option>Lebak / lembah</option></select></div>
+          <div class="form-group"><label>Arah Lereng</label><select><option value="">-- Pilih --</option><option>Utara</option><option>Timur</option><option>Selatan</option><option>Barat</option><option>Kombinasi</option></select></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)"><h2>🌳 3. Karakteristik Kebun</h2><span class="badge">Wajib</span></div>
+      <div class="section-body">
+        <div class="meta-grid">
+          <div class="form-group"><label>Varietas Utama</label><select><option value="">-- Pilih --</option><option>Gayo 1 (Arabika)</option><option>Tim-Tim (Arabika)</option><option>Ateng Super (Arabika)</option><option>Sigarar Utang (Arabika)</option><option>Bourbon (Arabika)</option><option>Catimor (Arabika)</option><option>Gesha (Arabika)</option><option>S-795 (Robusta)</option><option>BP 308 (Robusta)</option><option>Campuran</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Varietas Tambahan</label><input type="text" placeholder="70% Gayo 1, 30% Tim-Tim"></div>
+          <div class="form-group"><label>Pohon Produktif</label><input type="number" placeholder="3000"></div>
+          <div class="form-group"><label>Pohon Belum Produktif</label><input type="number" placeholder="800"></div>
+          <div class="form-group"><label>Usia Rata-rata</label><input type="text" placeholder="8-12 tahun"></div>
+          <div class="form-group"><label>Usia Tertua</label><input type="number" placeholder="25"></div>
+          <div class="form-group"><label>Usia Termuda</label><input type="number" placeholder="3"></div>
+          <div class="form-group"><label>Jar Tanam</label><input type="text" placeholder="2m x 2m"></div>
+          <div class="form-group"><label>Shade</label><select><option value="">-- Pilih --</option><option>Full sun</option><option>Low < 20%</option><option>Medium 20-40%</option><option>Heavy > 40%</option></select></div>
+          <div class="form-group"><label>Pohon Naungan</label><input type="text" placeholder="Avocado, Lamtoro"></div>
+          <div class="form-group"><label>Sistem Tanam</label><select><option value="">-- Pilih --</option><option>Monokultur</option><option>Agroforestri</option><option>Multi-cropping</option><option>Tumpang sari</option></select></div>
+          <div class="form-group"><label>Pemupukan</label><select><option value="">-- Pilih --</option><option>100% Organik</option><option>Semi-organik</option><option>Konvensional</option><option>Tidak pernah</option></select></div>
+          <div class="form-group"><label>Pestisida</label><select><option value="">-- Pilih --</option><option>Tidak pernah</option><option>Organik</option><option>Kimia terbatas</option><option>Kimia rutin</option></select></div>
+          <div class="form-group"><label>Sertifikasi</label><select multiple size="3"><option>Organic</option><option>Fairtrade</option><option>Rainforest Alliance</option><option>4C</option><option>Bird Friendly</option><option>Tidak ada</option><option>Lainnya</option></select></div>
+        </div>
+        <div class="subsection-title">🌧️ Iklim & Tanah</div>
+        <div class="meta-grid">
+          <div class="form-group"><label>Curah Hujan (mm/th)</label><input type="text" placeholder="2200 mm"></div>
+          <div class="form-group"><label>Musim Kemarau</label><input type="text" placeholder="Juni - Agustus"></div>
+          <div class="form-group"><label>Musim Hujan</label><input type="text" placeholder="September - Mei"></div>
+          <div class="form-group"><label>pH Tanah</label><input type="text" placeholder="6.2"></div>
+          <div class="form-group"><label>Jenis Tanah</label><select><option value="">-- Pilih --</option><option>Andosol</option><option>Latosol</option><option>Podsolik</option><option>Regosol</option><option>Aluvial</option><option>Tidak tahu</option></select></div>
+          <div class="form-group"><label>Sumber Air</label><select><option value="">-- Pilih --</option><option>Sungai</option><option>Mata air</option><option>Sumur bor</option><option>Embung</option><option>Hujan</option></select></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)"><h2>🍒 4. Produksi Cherry</h2><span class="badge">Wajib</span></div>
+      <div class="section-body">
+        <div class="meta-grid">
+          <div class="form-group"><label>Musim Panen Utama</label><input type="text" placeholder="Oktober - Januari"></div>
+          <div class="form-group"><label>Fly Crop</label><input type="text" placeholder="Mei - Juni"></div>
+          <div class="form-group"><label>Produksi Tahun Lalu (kg)</label><input type="text" placeholder="8000 kg"></div>
+          <div class="form-group"><label>Produksi Tahun Ini (kg)</label><input type="text" placeholder="7500 kg"></div>
+          <div class="form-group"><label>Yield per Ha</label><input type="text" placeholder="2000 kg/ha"></div>
+          <div class="form-group"><label>Yield per Pohon</label><input type="text" placeholder="2.5 kg/pohon"></div>
+          <div class="form-group"><label>Metode Petik</label><select><option value="">-- Pilih --</option><option>Selective picking</option><option>Strip picking</option><option>Campuran</option><option>Semi-mechanical</option></select></div>
+          <div class="form-group"><label>Picking Round</label><select><option value="">-- Pilih --</option><option>Tiap 7 hari</option><option>Tiap 10 hari</option><option>Tiap 14 hari</option><option>Tiap 21 hari</option><option>Sekali panen</option></select></div>
+          <div class="form-group"><label>Buruh Panen (orang)</label><input type="number" placeholder="15"></div>
+          <div class="form-group"><label>Asal Buruh</label><select><option value="">-- Pilih --</option><option>Keluarga</option><option>Lokal</option><option>Migran</option><option>Campuran</option></select></div>
+        </div>
+        <div class="subsection-title">📊 Riwayat Produksi (3 Tahun)</div>
+        <table class="table-dynamic">
+          <thead><tr><th>Tahun</th><th>Produksi (kg)</th><th>Yield (kg/ha)</th><th>Faktor</th><th>Aksi</th></tr></thead>
+          <tbody>
+            <tr><td><input type="number" placeholder="2024"></td><td><input type="text" placeholder="7500"></td><td><input type="text" placeholder="2100"></td><td><input type="text" placeholder="El Nino"></td><td><button class="btn btn-remove" onclick="this.parentElement.parentElement.remove()">Hapus</button></td></tr>
+          </tbody>
+        </table>
+        <button class="btn btn-add" onclick="addRowTable(this)">+ Tambah Tahun</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)"><h2>📎 5. Dokumen & Evidensi</h2><span class="badge">Opsional</span></div>
+      <div class="section-body">
+        <div class="meta-grid">
+          <div class="form-group"><label>Foto Kebun</label><input type="file" accept="image/*" multiple data-source="kebun" data-field="fotoKebun"></div>
+          <div class="form-group"><label>Foto Pohon</label><input type="file" accept="image/*" multiple data-source="kebun" data-field="fotoPohon"></div>
+          <div class="form-group"><label>Foto Panen</label><input type="file" accept="image/*" multiple data-source="kebun" data-field="fotoPanen"></div>
+          <div class="form-group"><label>Foto Sertifikat</label><input type="file" accept="image/*,.pdf" multiple data-source="kebun" data-field="fotoSertifikat"></div>
+          <div class="form-group"><label>Catatan Khusus</label><textarea placeholder="Varietas baru 2023, longsor 2022, dll."></textarea></div>
+          <div class="form-group"><label>Link Maps / What3Words</label><input type="text" placeholder="https://... atau ///word.word.word"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+
+
+<div style="text-align:center; margin:30px 0;">
+  <button id="btn-save-kebun" class="btn btn-save" onclick="submitToSheets('kebun')">💾 Simpan Form Kebun ke Google Sheets</button>
+</div>
+</div><!-- end pane-1 -->
+
+</div><!-- end container -->
+
+<button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
+
+<script>
+
+
+/* ===== TABS ===== */
+
+
+
+
+function goTab(n) {
+  document.querySelectorAll('.tab-pane').forEach(function(p) { 
+    p.style.display = 'none'; 
+    p.classList.remove('active'); 
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  var targetPane = document.getElementById('pane-' + n);
+  if (targetPane) { 
+    targetPane.style.display = 'block'; 
+    targetPane.classList.add('active');
+  }
+  var targetBtn = document.querySelectorAll('.tab-btn')[n];
+  if (targetBtn) targetBtn.classList.add('active');
+}
+
+/* ===== ACCORDION ===== */
+function toggleSection(h) {
+  h.parentElement.classList.toggle('active');
+}
+
+/* ===== PROCESSOR CONDITIONAL ===== */
+function toggleConditional(id, val) {
+  var el = document.getElementById(id);
+  if(el) el.classList.toggle('show', val === 'ya');
+}
+
+function toggleDrySections() {
+  var val = document.getElementById('dry-type').value;
+  ['floor','raised','greenhouse','greenhouse-cc','mechanical'].forEach(function(id) {
+    var el = document.getElementById('dry-'+id);
+    if(el) el.style.display = (id === val || (val==='mixed' && id!=='greenhouse-cc')) ? 'block' : 'none';
+  });
+  if(val==='greenhouse-cc') {
+    document.getElementById('dry-greenhouse').style.display = 'block';
+    document.getElementById('cc-detail').classList.add('show');
+  }
+}
+
+/* ===== PROCESSOR SDM ===== */
+function addRow(tableId) {
+  var tbody = document.querySelector('#'+tableId+' tbody');
+  var n = tbody.rows.length + 1;
+  var row = document.createElement('tr');
+  if(tableId === 'sdm-processor') {
+    row.innerHTML = '<td>'+n+'</td><td><select><option value="">-- Pilih Fungsi --</option><option>Receiving / Timbang Cherry</option><option>Sortir Cherry (rambang)</option><option>Operator Pulper</option><option>Fermentasi / Washing</option><option>Operator Demucilager</option><option>Drying / Jemur & Turning</option><option>Operator Huller</option><option>Suton / Density Sorting</option><option>Size Grading</option><option>Color Sorter Operator</option><option>Hand Pick / Manual Sorting</option><option>Packaging & Labeling</option><option>Warehouse / Gudang</option><option>Transport / Angkut</option><option>Cleaning / Sanitasi</option><option>QC / Lab / Cupping</option><option>Admin / Pencatatan</option><option>Mandor / Supervisor</option><option>Manager / Penanggung Jawab</option><option>Lainnya</option></select></td><td><input type="number" placeholder="Jumlah" style="width:70px"></td><td><select><option>Buruh harian tidak terikat</option><option>Buruh harian terikat internal</option><option>Buruh harian terikat outsource</option><option>Karyawan tetap (bulanan)</option><option>Kontrak (periode tertentu)</option><option>Pekerja sukarela / keluarga</option><option>Manajer / Operator tetap</option><option>Mandor / Supervisor</option><option>Lainnya</option></select></td><td><select><option>Harian (Rp/hari)</option><option>Per kilo cherry (Rp/kg)</option><option>Per kilo green bean (Rp/kg)</option><option>Borongan (per batch/lot)</option><option>Bulanan (Rp/bulan)</option><option>Bagi hasil (%)</option><option>Upah + bonus kualitas</option><option>Lainnya</option></select></td><td><input type="text" placeholder="Catatan"></td><td><button class="btn btn-remove" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>';
+  }
+  tbody.appendChild(row);
+}
+
+/* ===== KEBUN ===== */
+var kebunCount = 1;
+
+function makeKebun() {
+  var count = parseInt(document.getElementById('jumlah-kebun').value) || 1;
+  var box = document.getElementById('kebun-box');
+  if (!box) { console.error('kebun-box not found'); return; }
+  if (box.children.length === 0) { console.error('kebun-box is empty'); return; }
+  var first = box.children[0];
+  box.innerHTML = '';
+  box.appendChild(first);
+  kebunCount = 1;
+  first.querySelectorAll('.kebun-num').forEach(function(el) { el.textContent = '1'; });
+  for(var i=1; i<count; i++) {
+    addKebun();
+  }
+  }
+
+function addKebun() {
+  kebunCount++;
+  var box = document.getElementById('kebun-box');
+  if (!box || box.children.length === 0) { console.error('Cannot add kebun: box empty'); return; }
+  var first = box.children[0];
+  var clone = first.cloneNode(true);
+  clone.id = 'kebun-' + kebunCount;
+  clone.querySelectorAll('.kebun-num').forEach(function(el) { el.textContent = kebunCount; });
+  clone.querySelectorAll('input').forEach(function(inp) { if(inp.type !== 'button' && inp.type !== 'submit') inp.value = ''; });
+  clone.querySelectorAll('select').forEach(function(sel) { sel.selectedIndex = 0; });
+  clone.querySelectorAll('textarea').forEach(function(ta) { ta.value = ''; });
+  clone.querySelectorAll('.entity-conditional').forEach(function(el) { el.classList.remove('show'); });
+  clone.querySelectorAll('.table-dynamic tbody').forEach(function(tb) { while(tb.rows.length > 1) tb.deleteRow(1); });
+  box.appendChild(clone);
+  }
+
+function showEntity(sel) {
+  var box = sel.closest('.kebun-instance-body');
+  box.querySelectorAll('.entity-conditional').forEach(function(el) { el.classList.remove('show'); });
+  var target = box.querySelector('.entity-' + sel.value);
+  if(target) target.classList.add('show');
+}
+
+function addRowTable(btn) {
+  var table = btn.previousElementSibling;
+  var tbody = table.querySelector('tbody');
+  var n = tbody.rows.length + 1;
+  var row = document.createElement('tr');
+  if(table.querySelector('th:first-child').textContent === 'No') {
+    row.innerHTML = '<td>'+n+'</td><td><input type="text" placeholder="Nama"></td><td><input type="text" placeholder="NIK"></td><td><input type="text" placeholder="ha"></td><td><input type="text" placeholder="Varietas"></td><td><input type="text" placeholder="Kontak"></td><td><button class="btn btn-remove" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>';
+  } else {
+    row.innerHTML = '<td><input type="number" placeholder="Tahun"></td><td><input type="text" placeholder="kg"></td><td><input type="text" placeholder="kg/ha"></td><td><input type="text" placeholder="Faktor"></td><td><button class="btn btn-remove" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>';
+  }
+  tbody.appendChild(row);
+}
+
+/* ===== INIT ===== */
+addRow('sdm-processor');
+addRow('sdm-processor');
+addRow('sdm-processor');
+</script>
+<script>
+// ===== CUSTOM MODAL FUNCTIONS =====
+var modalCallback = null;
+function showModal(title, message, showCancel) {
+  return new Promise(function(resolve) {
+    modalCallback = resolve;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-message').textContent = message;
+    document.getElementById('modal-cancel').style.display = showCancel ? 'inline-block' : 'none';
+    document.getElementById('custom-modal').classList.add('show');
+  });
+}
+function modalResolve(result) {
+  document.getElementById('custom-modal').classList.remove('show');
+  if (modalCallback) modalCallback(result);
+  modalCallback = null;
+}
+function showAlert(message) {
+  return showModal('Informasi', message, false);
+}
+
+// ===== GAS CONFIG =====
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwdGMkaieCT7Py5GzOFuGaYF3upes_YpT4tN7sHNaR5G1cXeADPudQaSyhlPBI6jkja/exec';
+
+// ===== SUBMIT MASTER =====
+
+// ===== TEST GAS CONNECTION =====
+async function testGasConnection() {
+  try {
+    var response = await fetch(GAS_ENDPOINT + '?ping=1', { method: 'GET' });
+    var text = await response.text();
+    await showAlert('✅ GAS Connection OK\n\nResponse: ' + text.substring(0,200));
+  } catch(err) {
+    await showAlert('❌ GAS Connection Failed\n\nError: ' + err.message + '\n\nURL: ' + GAS_ENDPOINT);
+  }
+}
+
+
+// ===== FALLBACK: Export data as JSON file =====
+function exportDataAsJson(mode) {
+  var processor = collectProcessorData();
+  var kebun = collectKebunData();
+  var data = {
+    mode: mode,
+    timestamp: new Date().toISOString(),
+    processor: processor,
+    kebun: kebun
+  };
+
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'qco-data-' + mode + '-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  return data;
+}
+
+async function submitToSheets(mode) {
+  var modeLabel = (mode === 'processor') ? 'Processor' : 'Kebun';
+  var confirmed = await showModal('Konfirmasi', 'Simpan data ' + modeLabel + ' (termasuk foto) ke Google Sheets & Drive?', true);
+  if (!confirmed) return;
+
+  // Check payload size
+  var testPayload = { mode: mode, processor: collectProcessorData(), kebun: collectKebunData() };
+  var testSize = JSON.stringify(testPayload).length;
+  var btnId = (mode === 'processor') ? 'btn-save-processor' : 'btn-save-kebun';
+  var btn = document.getElementById(btnId);
+  var originalText = btn ? btn.textContent : '💾 Simpan';
+  if (btn) { btn.textContent = '⏳ Membaca data & foto...'; btn.disabled = true; }
+
+  try {
+    var submissionId = generateSubmissionId();
+    var timestamp = new Date().toISOString();
+    var processor = collectProcessorData();
+    var kebun = collectKebunData();
+
+    if (btn) btn.textContent = '⏳ Mengkonversi foto (' + countTotalFiles() + ' file)...';
+    var files = await collectAllFiles();
+
+    if (files.length === 0) {
+      var confirmed2 = await showModal('Konfirmasi', 'Tidak ada foto yang diupload. Lanjutkan menyimpan data teks saja?', true);
+      if (!confirmed2) {
+        if (btn) { btn.textContent = originalText; btn.disabled = false; }
+        return;
+      }
+    }
+
+    var payload = {
+      submissionId: submissionId,
+      timestamp: timestamp,
+      mode: mode,
+      processor: (mode === 'processor' || mode === 'all') ? processor : null,
+      kebun: (mode === 'kebun' || mode === 'all') ? kebun : null,
+      files: files
+    };
+
+    if (btn) btn.textContent = '⏳ Mengirim ke Google Sheets...';
+
+    // Send data to GAS - for file:// origin we use no-cors
+    // The request will be sent but response is opaque
+    var response = await fetch(GAS_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      credentials: 'omit',
+      redirect: 'follow',
+      body: JSON.stringify(payload)
+    });
+
+    // no-cors means we can't read response, but request went through
+    var result = { 
+      status: 'success', 
+      message: 'Data terkirim ke Google Sheets. Silakan cek Spreadsheet untuk konfirmasi.' 
+    };
+
+    // With no-cors, we always get an opaque response
+    // We assume success and ask user to verify in Spreadsheet
+    await showAlert('✅ Data terkirim ke Google Sheets!\n\nID: ' + submissionId + '\n\nSilakan verifikasi dengan membuka Spreadsheet Anda.\n\nNote: Karena keterbatasan CORS dari file lokal, kami tidak bisa membaca response server secara langsung. Data seharusnya sudah tersimpan.');
+
+  } catch (err) {
+    console.error('Submit error:', err);
+    // Even if fetch failed, try to export JSON as backup
+    try {
+      exportDataAsJson(mode);
+      await showAlert('⚠️ Gagal terhubung ke Google Sheets secara langsung.\n\n✅ Data sudah di-download sebagai file JSON (qco-data-' + mode + '-...json).\n\nAnda bisa:\n1. Import file JSON ke Google Sheets manual, atau\n2. Copy-paste data dari JSON ke Spreadsheet.\n\nError: ' + err.message);
+    } catch(exportErr) {
+      await showAlert('❌ Gagal mengirim dan export: ' + err.message + '\n\nCoba cek koneksi internet atau re-deploy GAS backend.');
+    }
+  } finally {
+    if (btn) { btn.textContent = originalText; btn.disabled = false; }
+  }
+}
+
+function generateSubmissionId() {
+  var d = new Date();
+  var pad = function(n) { return n < 10 ? '0' + n : n; };
+  return 'QC-' + d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '-' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+}
+
+function countTotalFiles() {
+  var count = 0;
+  document.querySelectorAll('input[type="file"]').forEach(function(inp) {
+    count += inp.files ? inp.files.length : 0;
+  });
+  return count;
+}
+
+async function collectAllFiles() {
+  var files = [];
+  var inputs = document.querySelectorAll('input[type="file"]');
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+    if (!input.files || input.files.length === 0) continue;
+    var source = input.getAttribute('data-source') || 'unknown';
+    var field = input.getAttribute('data-field') || 'unknown';
+    for (var j = 0; j < input.files.length; j++) {
+      var file = input.files[j];
+      var base64 = await fileToBase64(file);
+      files.push({ source: source, field: field, name: file.name, type: file.type || 'application/octet-stream', size: file.size, data: base64 });
+    }
+  }
+  return files;
+}
+
+function fileToBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function() { resolve(reader.result.split(',')[1]); };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ===== DATA COLLECTORS =====
+function collectProcessorData() {
+  var p = document.getElementById('pane-0');
+  return {
+    namaProcessor: getVal(p, 'input[placeholder*="Koperasi Maju"]'),
+    namaBadanUsaha: getVal(p, 'input[placeholder*="CV / PT"]'),
+    nib: getVal(p, 'input[placeholder*="NIB"]'),
+    tahunBerdiri: getVal(p, 'input[type="number"][placeholder="2015"]'),
+    alamat: getVal(p, 'textarea[placeholder*="Jl. Kopi"]'),
+    gps: getVal(p, 'input[placeholder*="-3.5954"]'),
+    telepon: getVal(p, 'input[placeholder*="0812-3456-7890"]'),
+    email: getVal(p, 'input[type="email"]'),
+    penanggungJawab: getVal(p, 'input[placeholder*="Nama penanggung jawab"]'),
+    nikPJ: getVal(p, 'input[placeholder*="Nomor Induk Kependudukan"]'),
+    jabatanPJ: getSel(p, 'select', 0),
+    pendidikanPJ: getSel(p, 'select', 1),
+    pengalamanPJ: getVal(p, 'input[type="number"][placeholder="10"]'),
+    sertifikasiPJ: getVal(p, 'input[placeholder*="Q Grader"]'),
+    jumlahGudang: getVal(p, 'input[type="number"][placeholder="2"]'),
+    kapasitasGudang: getVal(p, 'input[placeholder*="50 ton"]'),
+    ukuranRambang: getVal(p, 'input[placeholder*="6m x 4m"]'),
+    kapasitasRambang: getVal(p, 'input[placeholder*="2000 kg"]'),
+    hasPulper: getSel(p, 'select[onchange*="pulper-detail"]'),
+    hasDemucilager: getSel(p, 'select[onchange*="demucilager-detail"]'),
+    hasHuller: getSel(p, 'select[onchange*="huller-detail"]'),
+    hasSuton: getSel(p, 'select[onchange*="suton-detail"]'),
+    hasSizeGrader: getSel(p, 'select[onchange*="size-detail"]'),
+    hasColorSorter: getSel(p, 'select[onchange*="color-detail"]'),
+    hasHandPick: getSel(p, 'select[onchange*="handpick-detail"]'),
+    dryingType: getSel(p, 'select#dry-type'),
+    dryingCapacity: getVal(p, 'input[placeholder*="5000 kg"]'),
+    sopReceiving: collectSOP(p, 'A. Penerimaan'),
+    sopProcessing: collectSOP(p, 'B. Proses'),
+    sopDrying: collectSOP(p, 'C. SOP Jemur'),
+    sopSorting: collectSOP(p, 'D. SOP Dry Mill'),
+    sopPackaging: collectSOP(p, 'E. SOP Packaging'),
+    totalPekerjaTetap: getVal(p, 'input[type="number"][placeholder="5"]'),
+    totalBuruhPeak: getVal(p, 'input[type="number"][placeholder="25"]'),
+    totalBuruhLow: getVal(p, 'input[type="number"][placeholder="8"]'),
+    sdmDetails: JSON.stringify(collectSDM(p)),
+    npwp: getVal(p, 'input', 20),
+    sertifikasiProses: getSelMultiple(p, 'select[multiple]')
+  };
+}
+
+function collectKebunData() {
+  var box = document.getElementById('kebun-box');
+  var instances = box.querySelectorAll('.kebun-instance');
+  var kebunList = [];
+  instances.forEach(function(inst, idx) {
+    kebunList.push({
+      nomor: idx + 1,
+      bentukKelembagaan: getSel(inst, 'select', 0),
+      namaPemilik: getVal(inst, 'input[placeholder*="Nama petani"]') || getVal(inst, 'input[placeholder*="Gapoktan"]') || getVal(inst, 'input[placeholder*="Koperasi"]') || getVal(inst, 'input[placeholder*="PT Kopi"]') || getVal(inst, 'input[placeholder*="BUMDes"]'),
+      alamat: getVal(inst, 'textarea[placeholder*="Jl."]'),
+      provinsi: getSel(inst, 'select', 0),
+      kabupaten: getVal(inst, 'input[placeholder*="Bener Meriah"]'),
+      kecamatan: getVal(inst, 'input[placeholder*="Bandar"]'),
+      desa: getVal(inst, 'input[placeholder*="Desa Sumber"]'),
+      latitude: getVal(inst, 'input[placeholder*="-3.5954"]'),
+      longitude: getVal(inst, 'input[placeholder*="97.1411"]'),
+      elevation: getVal(inst, 'input[type="number"][placeholder="1450"]'),
+      totalLuas: getVal(inst, 'input[placeholder*="5.0 ha"]'),
+      luasProduktif: getVal(inst, 'input[placeholder*="3.5 ha"]'),
+      luasBelumProduktif: getVal(inst, 'input[placeholder*="1.0 ha"]'),
+      varietasUtama: getSel(inst, 'select', 1),
+      jumlahPohonProduktif: getVal(inst, 'input[type="number"][placeholder="3000"]'),
+      jumlahPohonBelum: getVal(inst, 'input[type="number"][placeholder="800"]'),
+      usiaRata: getVal(inst, 'input[placeholder*="8-12 tahun"]'),
+      shade: getSel(inst, 'select', 2),
+      sistemTanam: getSel(inst, 'select', 3),
+      pemupukan: getSel(inst, 'select', 4),
+      pestisida: getSel(inst, 'select', 5),
+      sertifikasi: getSelMultiple(inst, 'select[multiple]'),
+      curahHujan: getVal(inst, 'input[placeholder*="2200"]'),
+      musimKemarau: getVal(inst, 'input[placeholder*="Juni"]'),
+      musimHujan: getVal(inst, 'input[placeholder*="September"]'),
+      phTanah: getVal(inst, 'input[placeholder*="6.2"]'),
+      jenisTanah: getSel(inst, 'select', 6),
+      sumberAir: getSel(inst, 'select', 7),
+      musimPanen: getVal(inst, 'input[placeholder*="Oktober"]'),
+      produksiTahunLalu: getVal(inst, 'input[placeholder*="8000"]'),
+      produksiTahunIni: getVal(inst, 'input[placeholder*="7500"]'),
+      yieldPerHa: getVal(inst, 'input[placeholder*="2000"]'),
+      yieldPerPohon: getVal(inst, 'input[placeholder*="2.5"]'),
+      metodePetik: getSel(inst, 'select', 8),
+      pickingRound: getSel(inst, 'select', 9),
+      buruhPanen: getVal(inst, 'input[type="number"][placeholder="15"]'),
+      asalBuruh: getSel(inst, 'select', 10),
+      riwayatProduksi: JSON.stringify(collectTableData(inst, 'table-produksi')),
+      catatanKhusus: getVal(inst, 'textarea[placeholder*="Varietas baru"]')
+    });
+  });
+  return { kebunList: kebunList };
+}
+
+// ===== HELPERS =====
+function getVal(context, selector, index) {
+  var el = context.querySelectorAll(selector);
+  if (el.length === 0) return '';
+  if (index !== undefined) { return el[index] ? el[index].value : ''; }
+  return el[0] ? el[0].value : '';
+}
+function getSel(context, selector, index) {
+  var el = context.querySelectorAll(selector);
+  if (el.length === 0) return '';
+  if (index !== undefined) { return el[index] ? el[index].value : ''; }
+  return el[0] ? el[0].value : '';
+}
+function getSelMultiple(context, selector) {
+  var el = context.querySelector(selector);
+  if (!el) return '';
+  var selected = [];
+  for (var i = 0; i < el.options.length; i++) { if (el.options[i].selected) selected.push(el.options[i].text); }
+  return selected.join(', ');
+}
+function collectSOP(context, sectionTitle) {
+  var result = {};
+  context.querySelectorAll('.sop-flow').forEach(function(sec) {
+    if (sec.textContent.indexOf(sectionTitle) !== -1) {
+      sec.querySelectorAll('.sop-item').forEach(function(item, idx) {
+        var selects = item.querySelectorAll('select');
+        var inputs = item.querySelectorAll('input');
+        result['item_' + idx] = { select: selects[0] ? selects[0].value : '', input: inputs[0] ? inputs[0].value : '' };
+      });
+    }
+  });
+  return JSON.stringify(result);
+}
+function collectSDM(context) {
+  var data = [];
+  context.querySelectorAll('#sdm-processor tbody tr').forEach(function(row) {
+    var cells = row.querySelectorAll('td');
+    if (cells.length > 1) {
+      data.push({
+        fungsi: cells[1].querySelector('select') ? cells[1].querySelector('select').value : '',
+        jumlah: cells[2].querySelector('input') ? cells[2].querySelector('input').value : '',
+        klasifikasi: cells[3].querySelector('select') ? cells[3].querySelector('select').value : '',
+        sistemBayar: cells[4].querySelector('select') ? cells[4].querySelector('select').value : '',
+        catatan: cells[5].querySelector('input') ? cells[5].querySelector('input').value : ''
+      });
+    }
+  });
+  return data;
+}
+function collectTableData(context, tableClass) {
+  var table = context.querySelector('.' + tableClass);
+  if (!table) return [];
+  var data = [];
+  table.querySelectorAll('tbody tr').forEach(function(row) {
+    var rowData = [];
+    row.querySelectorAll('input').forEach(function(inp) { rowData.push(inp.value); });
+    data.push(rowData);
+  });
+  return data;
+}
+</script>
+
+
+<!-- CUSTOM MODAL -->
+<div id="custom-modal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="modal-title">Konfirmasi</h3>
+    <p id="modal-message">Apakah Anda yakin?</p>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" id="modal-cancel" onclick="modalResolve(false)">Batal</button>
+      <button class="modal-btn-ok" id="modal-ok" onclick="modalResolve(true)">OK</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
